@@ -1,11 +1,10 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
 
-        Person johana;
-        Person darwin;
-
-        johana = new Person();
-        darwin = new Person();
+        Person johana = new Person();
+        Person darwin = new Person();
 
         johana.name = "Johana";
         johana.age = 28;
@@ -15,8 +14,22 @@ public class Main {
         darwin.age = 34;
         darwin.weight = 63.0F;
 
+        //johana.printInfo();
+        //darwin.printInfo();
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Introduce your name:");
+        String name = scanner.nextLine();
+        johana.name = name;
+
+        System.out.println("Introduce your age:");
+        johana.age = scanner.nextInt();
+
+        System.out.println("Your weight:");
+        johana.weight = scanner.nextFloat();
+
         johana.printInfo();
-        darwin.printInfo();
 
     }
 }
