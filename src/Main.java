@@ -2,55 +2,43 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Car myCar = new Car(); // myCar es una instancia de car
 
-        Person johana = new Person();
-        Person darwin = new Person();
-
-        johana.name = "Johana";
-        johana.age = 28;
-        johana.weight = 70.0F;
-
-        darwin.name = "Darwin";
-        darwin.age = 34;
-        darwin.weight = 63.0F;
-
-        //johana.printInfo();
-        //darwin.printInfo();
+        String color;
+        String model;
 
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Introduce the color at car  ");
+        color = scanner.nextLine();
+        myCar.color = color;
 
-        System.out.println("Introduce your name:");
-        String name = scanner.nextLine();
-        johana.name = name;
-
-        System.out.println("Introduce your age:");
-        johana.age = scanner.nextInt();
-
-        System.out.println("Your weight:");
-        johana.weight = scanner.nextFloat();
-
-        johana.printInfo();
+        System.out.println("Introduce the  car model");
+        model = scanner.nextLine();
+        myCar.model = model;
+        myCar.printInfo();
 
     }
+
 }
 
-class Person {
+class Car {
+    String color;
+    String model;
 
-    String name;
-    int age;
-    float weight; //Peso
-
-    Person(){}
-
-    void eat() {
-        System.out.println("Eating...");
+    Car() {
     }
 
-    void sleep() {
-        System.out.println("Sleeping...");
+    void start() {
+        System.out.println("staring");
+    }
+
+    void stop() {
+        System.out.println("stopping");
     }
 
     void printInfo() {
-        System.out.println("My name is " + name + ", I'm "+ age + ", and my weight is " + weight);
+        System.out.println("color = " + color);
+        System.out.println("model = " + model);
     }
+
 }
