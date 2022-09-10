@@ -1,33 +1,14 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Person johana = new Person("Johana", 28);
+        String text = "This is-a test for Johana";
 
-        Person johana = new Person();
-        Person darwin = new Person();
+        String res = text.replace("test", "hola");
 
-        johana.name = "Johana";
-        johana.age = 28;
-        johana.weight = 70.0F;
-
-        darwin.name = "Darwin";
-        darwin.age = 34;
-        darwin.weight = 63.0F;
-
-        //johana.printInfo();
-        //darwin.printInfo();
-
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Introduce your name:");
-        String name = scanner.nextLine();
-        johana.name = name;
-
-        System.out.println("Introduce your age:");
-        johana.age = scanner.nextInt();
-
-        System.out.println("Your weight:");
-        johana.weight = scanner.nextFloat();
+        System.out.println("Res = " + res);
 
         johana.printInfo();
 
@@ -38,9 +19,12 @@ class Person {
 
     String name;
     int age;
-    float weight; //Peso
+    float weight = 90; //Peso
 
-    Person(){}
+    Person(String paraName, int paramAge){
+        this.name = paraName;
+        this.age = paramAge;
+    }
 
     void eat() {
         System.out.println("Eating...");
