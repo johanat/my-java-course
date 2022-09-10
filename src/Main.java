@@ -3,15 +3,17 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Person johana = new Person("Johana", 28);
-        String text = "This is-a test for Johana";
+        Person johana = new Person("Johana", 5);
+        Person darwin = new Person("Darwin", 35);
 
-        String res = text.replace("test", "hola");
+        ArrayList<Person> persons = new ArrayList<>();
 
-        System.out.println("Res = " + res);
+        persons.add(johana);
+        persons.add(darwin);
 
-        johana.printInfo();
-
+        for(int i=0; i<persons.size(); i++) {
+            persons.get(i).printInfo();
+        }
     }
 }
 
