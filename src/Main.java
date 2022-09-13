@@ -10,7 +10,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         int number;
-
+        int index;
         System.out.println("Introduce a number from 1 to 5");
         number = scanner.nextInt();
         if (number <= 5) {
@@ -29,9 +29,25 @@ public class Main {
             System.out.println("Number invalid");
         }
 
-        for (int j = 0; j < people.size(); j++) {
-            System.out.println("persona" + j);
-            people.get(j).printInfo();
+        printPeopleArray(people);
+
+        System.out.println("\n Which user do you want to modify?, introduce a index");
+        index = scanner.nextInt();
+
+        System.out.println("Introduce your name");
+        people.get(index).name = scanner.next();
+        System.out.println("Introduce your age");
+        people.get(index).age = scanner.nextInt();
+        System.out.println("Introduce your weight");
+        people.get(index).weight = scanner.nextFloat();
+
+        printPeopleArray(people);
+
+    }
+    static void printPeopleArray(ArrayList<Person> people) {
+        for (int k = 0; k < people.size(); k++) {
+            System.out.println("persona" + k);
+            people.get(k).printInfo();
         }
     }
 }
@@ -48,7 +64,6 @@ class Person {
     }
 
     void printInfo() {
-        System.out.println("My name is " + name.toUpperCase() + " I am age  " + age + " and my weight is " + weight);
-
+        System.out.println("\nMy name is " + name.toUpperCase() + " I am age  " + age + " and my weight is " + weight);
     }
 }
