@@ -6,14 +6,7 @@ public class Main {
         Person johana = new Person("Johana", 5);
         Person darwin = new Person("Darwin", 35);
 
-        ArrayList<Person> persons = new ArrayList<>();
-
-        persons.add(johana);
-        persons.add(darwin);
-
-        for(int i=0; i<persons.size(); i++) {
-            persons.get(i).printInfo();
-        }
+        johana.eat();
     }
 }
 
