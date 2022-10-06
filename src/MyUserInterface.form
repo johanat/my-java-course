@@ -16,13 +16,15 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="eadee" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+          <component id="eadee" class="javax.swing.JTextField" binding="resultPantalla">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <font size="36"/>
+            </properties>
           </component>
         </children>
       </grid>
@@ -36,39 +38,48 @@
         <children>
           <component id="d77c" class="javax.swing.JButton" binding="btn0">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <preferred-size width="50" height="-1"/>
+              </grid>
             </constraints>
             <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <hideActionText value="false"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
               <text value="0"/>
             </properties>
           </component>
           <component id="98df2" class="javax.swing.JButton" binding="btn1">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font name="Consolas" size="36" style="0"/>
               <text value="1"/>
             </properties>
           </component>
           <component id="28e87" class="javax.swing.JButton" binding="btn2">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font name="Consolas" size="36" style="0"/>
               <text value="2"/>
             </properties>
           </component>
-          <component id="33d" class="javax.swing.JButton" binding="a3Button" default-binding="true">
+          <component id="33d" class="javax.swing.JButton" binding="btn3">
             <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <font name="Consolas" size="36" style="0"/>
               <text value="3"/>
             </properties>
           </component>
         </children>
       </grid>
-      <grid id="867d8" binding="row3" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="867d8" binding="row3" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -76,22 +87,45 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="521ab" class="javax.swing.JButton" binding="button1" default-binding="true">
+          <component id="521ab" class="javax.swing.JButton" binding="btn4">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Button"/>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="4"/>
             </properties>
           </component>
-          <hspacer id="b1e35">
+          <component id="81633" class="javax.swing.JButton" binding="btn5">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
-          </hspacer>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="5"/>
+            </properties>
+          </component>
+          <component id="59e70" class="javax.swing.JButton" binding="btn6">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="6"/>
+            </properties>
+          </component>
+          <component id="7680" class="javax.swing.JButton" binding="btn7">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="7"/>
+            </properties>
+          </component>
         </children>
       </grid>
-      <grid id="9837b" binding="row4" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="9837b" binding="row4" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -99,22 +133,45 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ecb50" class="javax.swing.JButton" binding="button2" default-binding="true">
+          <component id="ecb50" class="javax.swing.JButton" binding="btn8">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Button"/>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="8"/>
             </properties>
           </component>
-          <hspacer id="8fda1">
+          <component id="5c792" class="javax.swing.JButton" binding="btn9">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
-          </hspacer>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="9"/>
+            </properties>
+          </component>
+          <component id="e06c5" class="javax.swing.JButton" binding="btnX">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="X"/>
+            </properties>
+          </component>
+          <component id="6e882" class="javax.swing.JButton" binding="btnIgual">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="="/>
+            </properties>
+          </component>
         </children>
       </grid>
-      <grid id="b8903" binding="row5" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="b8903" binding="row5" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -122,21 +179,42 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="46be5" class="javax.swing.JButton" binding="button3" default-binding="true">
+          <component id="795d1" class="javax.swing.JButton" binding="btnSuma">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <background color="-16767279"/>
-              <foreground color="-4512231"/>
-              <text value="Button"/>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="+"/>
             </properties>
           </component>
-          <hspacer id="90a9">
+          <component id="59b9e" class="javax.swing.JButton" binding="btnResta">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
-          </hspacer>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="-"/>
+            </properties>
+          </component>
+          <component id="63ac1" class="javax.swing.JButton" binding="btnMultiplicacion">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="*"/>
+            </properties>
+          </component>
+          <component id="1d95f" class="javax.swing.JButton" binding="btnDivision">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="36" style="0"/>
+              <text value="/"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>
