@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class MyUserInterface extends JFrame {
 
+
     private JPanel mainPanel;
     private JTextField name1;
     private JTextField edad;
@@ -17,7 +18,6 @@ public class MyUserInterface extends JFrame {
     private JPanel tituloGeneral;
     private JLabel print;
     ArrayList<Persona> peopleUsuare = new ArrayList<>(); // (variable global) lo ven todos y (variables locales)  debe estar dentro de un metodo y sera manejados solo los atributos de dicho metodo  ejemplo  MyUserInterface es un metodo mas si quieres que solo este metodo vea este array debes ponerlo dentro.
-
 
     MyUserInterface() {
 
@@ -53,11 +53,12 @@ public class MyUserInterface extends JFrame {
                     general += "<html> Name: " + nameC + "<br/>" +
                             " Age: " + ageC + "<br/>" +
                             " Weight: " + weightC + "<br/>" +
-                            " Autorized: " + autorizacionC + "<br/>" +
+                            " Autorized: " + autorizacionC + "<br/> " +
                             "________________" + "<br/>";
 
                     print.setText(general);
                 }
+
                 name1.setText("");
                 edad.setText("");
                 peso.setText("");
@@ -65,27 +66,7 @@ public class MyUserInterface extends JFrame {
             }
 
         });
-    }
-
-
-    class Persona {
-        String name;
-        int age;
-        float weight;
-        boolean autorizacion;
-
-        Persona(String name, int age, float weight, boolean autorizacion) {
-
-            this.name = name;
-            this.age = age;
-            this.weight = weight;
-            this.autorizacion = autorizacion;
-
-
-        }
-    }
-
-    ;
+    };
 
 
     public static void main(String[] args) {
@@ -93,4 +74,59 @@ public class MyUserInterface extends JFrame {
         frame.setVisible(true);
     }
 
+    static String fromArrayToString(ArrayList<Persona> personas) {
+        String general = "";
+
+        int counter = personas.size() - 1;
+
+        for (int i = 0; i < personas.size(); i++) {
+            String nameC = personas.get(i).name;
+            String ageC = String.valueOf(personas.get(i).age);
+            String weightC = Float.toString(personas.get(i).weight);
+            boolean autorizacionC = personas.get(i).autorizacion;
+
+            general += nameC + "&" + ageC + "&" + weightC + "&" + autorizacionC;
+            if (i < counter) {
+                general += "##";
+            }
+        }
+        fromStringToArray(general);
+        return general;
+    }
+
+
+    static ArrayList<Persona> fromStringToArray(String general) {
+
+        ArrayList nameUser = new ArrayList<>();
+        String[] finals;
+
+        String[] partes = general.split("##");
+
+        for (int i = 0; i < partes.length; i++) {
+            finals = partes[i].split("&");
+            Persona user = new Persona(finals[0],Integer.parseInt(finals[1]),Float.parseFloat(finals[2]),Boolean.getBoolean(finals[3]));
+            nameUser.add(user);
+        }
+        return nameUser;
+    }
 }
+
+class Persona {
+    String name;
+    int age;
+    float weight;
+    boolean autorizacion;
+
+    Persona(String name, int age, float weight, boolean autorizacion) {
+
+        this.name = name;
+        this.age = age;
+        this.weight = weight;
+        this.autorizacion = autorizacion;
+
+
+    }
+}
+
+
+
