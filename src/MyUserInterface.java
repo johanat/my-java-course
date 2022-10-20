@@ -19,7 +19,8 @@ public class MyUserInterface extends JFrame {
     private JLabel print;
     private JButton Save;
     private JButton delete;
-    private JTextField deletePerson;
+    private JTextField deleteAndUpDate;
+    private JButton Actualizar;
     private JButton Delete;
     static ArrayList<Persona> peopleUsuare = new ArrayList<>(); // (variable global) lo ven todos y (variables locales)  debe estar dentro de un metodo y sera manejados solo los atributos de dicho metodo  ejemplo  MyUserInterface es un metodo mas si quieres que solo este metodo vea este array debes ponerlo dentro.
 
@@ -45,21 +46,8 @@ public class MyUserInterface extends JFrame {
                 Persona person = new Persona(name1.getText(), Integer.parseInt(age), Float.parseFloat(weight), buttonAutorizacion.isSelected());
                 peopleUsuare.add(person);
 
-                String general = "";
+                printfArray();
 
-                for (int i = 0; i < peopleUsuare.size(); i++) {
-                    String nameC = peopleUsuare.get(i).name;
-                    String ageC = String.valueOf(peopleUsuare.get(i).age);
-                    String weightC = Float.toString(peopleUsuare.get(i).weight);
-                    boolean autorizacionC = peopleUsuare.get(i).autorizacion;
-
-                    general += "<html> Name: " + nameC + "<br/>" +
-                            " Age: " + ageC + "<br/>" +
-                            " Weight: " + weightC + "<br/>" +
-                            " Autorized: " + autorizacionC + "<br/> " +
-                            "________________" + "<br/>";
-                    print.setText(general);
-                }
                 name1.setText("");
                 edad.setText("");
                 peso.setText("");
@@ -84,7 +72,7 @@ public class MyUserInterface extends JFrame {
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String datoDelete = deletePerson.getText();
+                String datoDelete = deleteAndUpDate.getText();
 
                 for (int i = 0; i < peopleUsuare.size(); i++) {
                     if (peopleUsuare.get(i).name.startsWith(datoDelete) == true) {
@@ -94,15 +82,48 @@ public class MyUserInterface extends JFrame {
                 }
             }
         });
-    };
-     static void printfArray (){
-         String imprimir = "";
+        Actualizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String update = deleteAndUpDate.getText();
+                String generalActulizar="";
 
-         for (int i = 0; i < peopleUsuare.size(); i++) {
 
-             imprimir = imprimir + peopleUsuare.get(i).toString();
-         }
-         print2.setText(imprimir);
+
+
+                for (int i = 0; i < peopleUsuare.size(); i++) {
+                    if (peopleUsuare.get(i).name.startsWith(update) == true) {
+                        if(!name1.getText().equals("")){
+                            peopleUsuare.get(i).name = name1.getText();
+                        }
+                        if(!edad.getText().equals("")){
+                            peopleUsuare.get(i).age =  Integer.parseInt(edad.getText());
+                        }
+                        if(!peso.getText().equals("")){
+                            peopleUsuare.get(i).weight = Float.parseFloat(peso.getText());
+                        }
+                        peopleUsuare.get(i).autorizacion=buttonAutorizacion.isSelected();
+
+                    }
+
+                }
+                printfArray();
+
+
+            }
+        });
+    }
+
+    ;
+
+    static void printfArray() {
+        String imprimir = "";
+
+        for (int i = 0; i < peopleUsuare.size(); i++) {
+
+            imprimir = imprimir + peopleUsuare.get(i).toString();
+        }
+        print2.setText(imprimir);
 
     }
 
