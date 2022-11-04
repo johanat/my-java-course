@@ -3,16 +3,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        final int salary= 1000;
-        int commission;
-        float valueFromCar, totalMonthly;
+        float participation, firstExam, secondExam, examFinal, qualificationFinal;
         Scanner input = new Scanner(System.in);
-        System.out.println("Introduce  the number of cars sold");
-        commission = input.nextInt();
-        System.out.println("Introduce the amount of the cars ");
-       valueFromCar = input.nextFloat();
-        totalMonthly= salary+(commission*150)+(0.05f*valueFromCar*commission);
-        System.out.println("The salary the an employee is "+totalMonthly);
+        System.out.println("Introduce the fort note of the student");
+        participation = input.nextFloat();
+        firstExam = input.nextFloat();
+        secondExam = input.nextFloat();
+        examFinal = input.nextFloat();
+
+        qualificationFinal= (participation*0.10f)+(firstExam*0.25f)+(secondExam*0.25f)+(examFinal*0.40f);
+        System.out.println("QualificationFinal is "+qualificationFinal);
 
     }
 }
