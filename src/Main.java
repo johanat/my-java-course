@@ -3,14 +3,17 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        float guillermo, luis, juan, total;
+        final int salary= 1000;
+        int commission;
+        float valueFromCar, totalMonthly;
         Scanner input = new Scanner(System.in);
-        System.out.println("Introduce the quantity of money that has Guillermo ");
-        guillermo= input.nextFloat();
-        luis= guillermo/2;
-        juan= (guillermo+luis)/2;
-        total=guillermo+luis+juan;
-        System.out.println("\nGuillermo: "+guillermo+"\n luis: "+luis+"\njuan. "+juan+ "\n\n la cantidad de dinero tiene juan es : "+total);
+        System.out.println("Introduce  the number of cars sold");
+        commission = input.nextInt();
+        System.out.println("Introduce the amount of the cars ");
+       valueFromCar = input.nextFloat();
+        totalMonthly= salary+(commission*150)+(0.05f*valueFromCar*commission);
+        System.out.println("The salary the an employee is "+totalMonthly);
+
     }
 }
 
