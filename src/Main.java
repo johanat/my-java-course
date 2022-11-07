@@ -1,22 +1,18 @@
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int num1, num2;
+        char letter;
+        Scanner input = new Scanner (System.in);
+        System.out.println("Introduce a letter");
+        letter= input.nextLine().charAt(0); // in java not manage nextChar for read must us put NestLine.charAt(0) not read chars
 
-        Scanner input = new Scanner(System.in);
-        System.out.println("Introduce a num1");
-        num1=input.nextInt();
-        System.out.println("Introduce a num2");
-        num2=input.nextInt();
-        if(num1>num2){
-            System.out.println("the largest number is = "+num1);
+        if(Character.isUpperCase(letter)){
+            System.out.println("Yes is capital letter ");
         }
-        else if(num2>num1){
-            System.out.println("The largest number is = "+ num2);
-        }
-        else{
-            System.out.println("Are same");
+        else {
+            System.out.println("Not is  capital letter ");
         }
     }
 }
