@@ -3,17 +3,19 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        char letter;
-        Scanner input = new Scanner (System.in);
-        System.out.println("Introduce a letter");
-        letter= input.nextLine().charAt(0); // in java not manage nextChar for read must us put NestLine.charAt(0) not read chars
 
-        if(Character.isUpperCase(letter)){
-            System.out.println("Yes is capital letter ");
+        Float amount, discount,total;
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Introduce  amount of the buy ");
+        amount = input.nextFloat();
+        if (amount > 300) {
+            discount = amount * 0.20f ;
+            total= discount-amount;
+        } else {
+            total = amount;
         }
-        else {
-            System.out.println("Not is  capital letter ");
-        }
+        System.out.println("Value to pay of the client is = "+total);
     }
 }
 
