@@ -24,6 +24,7 @@ public class ListBasicTutorial extends JFrame {
         countryList = new JList<>(listTutorial);
         //noinspection Convert2Lambda
         countryList.addListSelectionListener(new ListSelectionListener() {
+
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
@@ -33,6 +34,7 @@ public class ListBasicTutorial extends JFrame {
             }
         });
         add(new JScrollPane(countryList));
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("listBasicTutorial");
         this.setSize(200, 200);
