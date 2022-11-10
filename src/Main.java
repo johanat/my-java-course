@@ -1,7 +1,7 @@
 
 
 import java.util.Scanner;
-// exercise N.9
+// exercise N.10
 
 public class Main {
     public static void main(String[] args) {
@@ -11,20 +11,59 @@ public class Main {
         day = input.nextInt();
         System.out.println("Introduce the month ");
         month = input.nextInt();
-        System.out.println("Introduce the first number ");
+        System.out.println("Introduce the year ");
         year = input.nextInt();
-        if (day >= 1 && day <= 30) { // si el dia es correct
-            if (month >= 1 && month <= 12) { // si el mes es correct
-                if (year != 0) { // si el año es correct
-                    System.out.println("The data is correct");
-                }else{
-                    System.out.println("The year is incorrect");
-                }
-            }else{
-                System.out.println("The month is incorrect");
-            }
-        }else{
-            System.out.println("The day is correct");
+
+        if(day>=1 && day<=31 && month==1 && year !=0) {
+            System.out.println("The date is correct");
+
+        }
+        else if(day>=1 && day<=28 && month==2 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if (day>=1 && day<=31 && month ==3 && year !=0) {
+            System.out.println("The date is correct");
+
+        }
+        else if( day>=1 && day<=30 && month ==4 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if (day>=1 && day<=31 && month ==5 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if (day>=1 && day<=30 && month ==6 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if(day>=1 && day<=31 && month == 7 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if(day>=1 && day<=31 && month == 8 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if(day>=1 && day<=30 && month == 9 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if (day>=1 && day<=31 && month == 10 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if ( day>=1 && day<=30 && month == 11 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else if ( day>=1 && day <= 31 && month == 12 && year !=0){
+            System.out.println("The date is correct");
+
+        }
+        else {
+            System.out.println("The date is incorrect");
         }
     }
 }
