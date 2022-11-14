@@ -1,20 +1,24 @@
 
 
 import java.util.Scanner;
-// exercise bucles N.1
+// exercise bucles N.2
 
 public class Main {
     public static void main(String[] args) {
 
-        int num, cuadrado=0;
+        int num, result;
 
         Scanner input = new Scanner(System.in);
         System.out.println("Introduce a number ");
         num=input.nextInt();
 
-        while(num>=0){
-            cuadrado=(int) Math.pow(num,2);
-            System.out.println(cuadrado);
+        while(num!=0){
+            if(num>0){
+                System.out.println("The number is positive (+)");
+            }
+            else{
+                System.out.println("The number is negative (-)");
+            }
             System.out.println("Introduce a number ");
             num=input.nextInt();
         }
