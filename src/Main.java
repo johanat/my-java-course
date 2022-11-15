@@ -1,26 +1,20 @@
 
 
 import java.util.Scanner;
-// exercise bucles N.3
+// exercise bucles N.4
 
 public class Main {
     public static void main(String[] args) {
 
-        int num;
+        int num,i ;
         Scanner input = new Scanner(System.in);
         System.out.println("Introduce a number ");
         num = input.nextInt();
-
-        while(num!=0){
-            if(num%2==0){
-                System.out.println("The number "+num+ " is pare ");
-            }
-            else{
-                System.out.println("The number "+ num+ " is odd");
-            }
-            System.out.println("Introduce a number ");
-            num=input.nextInt();
-        }
+       for( i=0; num>=0; i++){
+           System.out.println("Introduce a number ");
+           num = input.nextInt();
+       }
+        System.out.println("Number introduced are "+i + " Not negative");
     }
 }
 
