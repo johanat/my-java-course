@@ -1,35 +1,22 @@
 
 
 import java.util.Scanner;
-// exercise bucles N.5
+// exercise bucles N.6
 
 public class Main {
     public static void main(String[] args) {
 
-        int num, round, counter=0;
-        Scanner input = new Scanner(System.in);
+        int num, suma;
+        Scanner input= new Scanner(System.in);
         System.out.println("Introduce a number");
-        num = input.nextInt();
-        round = (int) (Math.random() * 100);
-
-
-        do {
-            if (round > num) {
-                System.out.println("The number is major ");
-                System.out.println("Introduce a number");
-                num= input.nextInt();
-            }
-            else {
-                System.out.println("The number is minor  ");
-                System.out.println("Introduce a number");
-                num= input.nextInt();
-            }
-            counter++;
-
-        } while (num != round);
-        System.out.println("Cool you won,you guessed the number in  "+counter+ " try");
-        num=input.nextInt();
-
+        num= input.nextInt();
+        suma=num;
+        while(num!=0){
+            System.out.println("introduce a number");
+            num= input.nextInt();
+            suma+=num;
+        }
+        System.out.println("sum of all the number are : "+ suma);
     }
 }
 
