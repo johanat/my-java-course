@@ -2,32 +2,19 @@
 
 import java.security.spec.RSAOtherPrimeInfo;
 import java.util.Scanner;
-// exercise bucles N.7
+// exercise bucles N.8
 
 public class Main {
     public static void main(String[] args) {
 
-        int num, suma = 0, counter = 1;
-        float media = 0;
+      Scanner input =  new Scanner(System.in);
+        int num;
+        System.out.println("Introduce a number ");
+        num= input.nextInt();
 
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Introduce a number");
-        num = input.nextInt();
-
-        if (num >= 0) {
-            suma += num;
-        }
-        while (num >= 0) {
-            System.out.println("Introduce a number");
-            num = input.nextInt();
-            if (num >= 0) {
-                suma += num;
-                counter++;
-                media = (float)suma / counter;
-            }
-        }
-        System.out.println("La media es " + media);
+       for ( int i=1; i<=num; i++){
+           System.out.println(i);
+       }
     }
 }
 
