@@ -1,25 +1,38 @@
-// exercise bucle N.14
+// exercise bucle N.15
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        float salary, sumSalary = 0;
-        int counter = 0;
-
-
+        int  ages, counterAges =0,counterHeights=0, sumaOfAges=0;
+        float sumaOfHeights=0,mediaAges=0, mediaHeights=0, heights;
         Scanner input = new Scanner(System.in);
-
-        for (int i = 1; i <= 10; i++) {
-            System.out.println("Introduce the salary " + i);
-            salary = input.nextFloat();
-            sumSalary += salary;
-            if (salary > 1000) {
-                counter++;
+        for(int i=0; i<5; i++){
+            System.out.println("Introduce the age of the student ");
+            ages=input.nextInt();
+            sumaOfAges+=ages;
+            mediaAges=(float) sumaOfAges/5;
+            if(ages>18){
+                counterAges++;
             }
         }
-        System.out.println("The sum of all the salary is " + sumSalary);
-        System.out.println(" total major to 1000 = " + counter);
+        System.out.println("The media of ages is "+ mediaAges);
+        System.out.println("Total number of students over 18 years is "+counterAges );
+
+        for(int j=0; j<5; j++){
+            System.out.println("Introduce the heights of the students");
+            heights=input.nextFloat();
+            sumaOfHeights+=heights;
+            mediaHeights= (float) Math.round(100*sumaOfHeights/5)/100;
+
+            if(heights>1.75){
+                counterHeights++;
+            }
+        }
+        System.out.println("the media of heights is "+ mediaHeights);
+        System.out.println("Total numbers of students who measure more than  "+counterHeights );
+
+
     }
 }
 
