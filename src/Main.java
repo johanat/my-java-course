@@ -1,30 +1,25 @@
-// exercise bucle N.19
+// exercise bucle N.20
 
 import java.util.Scanner;
-// 10 a 5 approved
-// 4 conditioned
-//0 a 3 suspense
+
 
 public class Main {
     public static void main(String[] args) {
-        int num, counterApproved = 0, counterConditioned = 0, counterSuspense = 0;
+        int num, totalSalary, salary = 0, maxime=0;
         Scanner input = new Scanner(System.in);
-        for (int i = 0; i < 6; i++) {
+        System.out.println("Introduce a number");
+        num = input.nextInt();
+        for (int i = 0; i < num; i++) {
+            System.out.println("Introduce a salary");
+            salary = input.nextInt();
 
-            do {
-                System.out.println("Introduce the notes of the students");
-                num = input.nextInt();
-            }
-            while (num < 0 || num >10);
-            if (num == 4) {
-                counterConditioned++;
-            } else if (num >= 5) {
-                counterApproved++;
-            } else {
-                counterSuspense++;
+            if (salary>maxime) {
+                maxime = salary;
             }
         }
-        System.out.println("Total of the students approved = " + counterApproved + "\nTotal of the students conditioned = " + counterConditioned + "\nTotal of the students Suspense = " + counterSuspense);
+        System.out.println("the salary maxime is " +maxime);
+
+
     }
 }
 
