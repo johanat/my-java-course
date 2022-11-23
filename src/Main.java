@@ -1,43 +1,30 @@
-// exercise bucle N.18
+// exercise bucle N.19
 
 import java.util.Scanner;
+// 10 a 5 approved
+// 4 conditioned
+//0 a 3 suspense
 
 public class Main {
     public static void main(String[] args) {
-        int code, cantidadlitros = 0, counter = 0;
-        float precioLitro = 0, billTotal = 0;
-        double litros;
+        int num, counterApproved = 0, counterConditioned = 0, counterSuspense = 0;
         Scanner input = new Scanner(System.in);
-        for (int i = 0; i < 5; i++) {
-            do {
-                System.out.println("Introduce code of the bill");
-                code = input.nextInt();
-            } while (code < 1 || code > 3);
-            System.out.println("Introduce  sold amount liter ");
-            litros = input.nextFloat();
-            switch (code) {
-                case 1:
-                    precioLitro = 0.6f;
-                    break;
-                case 2:
-                    precioLitro = 3f;
-                    break;
-                case 3:
-                    precioLitro = 1.25f;
-                    break;
-            }
+        for (int i = 0; i < 6; i++) {
 
-            if (code == 1) {
-                cantidadlitros += litros;
+            do {
+                System.out.println("Introduce the notes of the students");
+                num = input.nextInt();
             }
-            billTotal += (float) litros * precioLitro;
-            if (litros * precioLitro > 600) {
-                counter++;
+            while (num < 0 || num >10);
+            if (num == 4) {
+                counterConditioned++;
+            } else if (num >= 5) {
+                counterApproved++;
+            } else {
+                counterSuspense++;
             }
         }
-        System.out.println("billing total is " + billTotal);
-        System.out.println("Amount total in liters of the article sold 1:" + cantidadlitros);
-        System.out.println("How many invoices were issued greater than 600 " + counter);
+        System.out.println("Total of the students approved = " + counterApproved + "\nTotal of the students conditioned = " + counterConditioned + "\nTotal of the students Suspense = " + counterSuspense);
     }
 }
 
