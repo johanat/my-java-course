@@ -1,4 +1,4 @@
-// exercise vectors o array N.1
+// exercise vectors o array N.2
 import java.util.Scanner;
 
 public class Main {
@@ -9,8 +9,9 @@ public class Main {
             System.out.println(i+1+" Introduce a number");
             num[i]=input.nextFloat();
         }
-        for(float i:num){
-            System.out.println(i);
+        System.out.println("Display numbers in reverse  ");
+        for(int i=4; i>=0; i-- ){
+            System.out.println(num[i]);
         }
     }
 }
