@@ -1,44 +1,37 @@
-// exercise vectors o array N.6S
+// exercise vectors o array N.7
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int a[] , b[], c[];
-        a=new int[12];
-        b=new int [12];
-        c=new int[24];
+        int numbers [];
+        numbers=new int[10];
+        boolean growing= false, decreasing= false; //growing = creciente
 
-        System.out.println("Fill the table A");
-        for(int i=0; i<12; i++){
+        for(int i=0; i<10; i++){
             System.out.print((i+1)+" Introduce a number ");
-            a[i]=input.nextInt();
+            numbers[i]=input.nextInt();
         }
-        System.out.println("\n Fill the table B");
+        for(int i=0; i<9; i++){
+            if(numbers[i]<numbers[i+1]){
+                growing=true;
+            }
+            if(numbers[i]>numbers[i+1]){
+                decreasing= true;
+            }
 
-        for(int k=0; k<12; k++){
-            System.out.print((k+1)+" Introduce a number ");
-            b[k]=input.nextInt();
         }
-        int j=0;
-        for(int i=0; i<4; i++ ){
-            c[j]=a[i];
-            j++;
-            c[j]=a[i];
-            j++;
-            c[j]=a[i];
-            j++;
-            c[j]=b[i];
-            j++;
-            c[j]=b[i];
-            j++;
-            c[j]=b[i];
-            j++;
+        if(growing ==true && decreasing==false){
+            System.out.println("\nNumbers is in form growing ");
         }
-        j=0;
-        System.out.println("Result of the table C is");
-        for( int i=0; i<24; i++){
-            System.out.print(c[i]+" ");
+        else if (growing== false && decreasing==true){
+            System.out.println("\nNumbers is in form decreasing ");
+        }
+        else if(growing==true&& decreasing== true){
+            System.out.println("\nNumbers is in form disorder");
+        }
+        else if(growing==false&& decreasing==false){
+            System.out.println("\nNumbers are aqual");
         }
     }
 }
