@@ -1,29 +1,26 @@
-// exercise vectors o array N.8
+// exercise vectors o array N.9
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int numbers[], num, index;
+        int numbers[];
+        int ultimo;
         numbers = new int[10];
-        for (int i = 0; i < 8; i++) {
-            System.out.print(" Introduce a number ");
+
+        for (int i = 0; i < 10; i++) {
+            System.out.print((i + 1) + " Introduce a number ");
             numbers[i] = input.nextInt();
         }
-        System.out.println("N.8 Introduce a number ");
-        num = input.nextInt();
-        System.out.println("Introduce a position");
-        index = input.nextInt();
+        ultimo = numbers[9];
 
-        for (int i = 7; i >= index; i--) {
+        for (int i = 8; i >= 0; i--) {
             numbers[i + 1] = numbers[i];
-            if (i == index) {
-                numbers[index] = num;
-            }
         }
-        numbers[index] = num;
-        for (int i = 0; i < 9; i++) {
+        numbers[0] = ultimo;
+
+        for (int i = 0; i < 10; i++) {
             System.out.print(numbers[i] + " ");
         }
     }
