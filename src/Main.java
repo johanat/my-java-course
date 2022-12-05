@@ -1,35 +1,46 @@
-// exercise vectors o array N.12
+// exercise vectors o array N.13
 
-import java.security.spec.RSAOtherPrimeInfo;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int numbers[];
-        int num, index = 0;
-        numbers = new int[10];
+        int numbers[] = new int[10], counterPairs = 0, counterOdds = 0;
 
+
+        int j = 0, r = 0;
         for (int i = 0; i < 10; i++) {
             System.out.print((i + 1) + " Introduce a number ");
             numbers[i] = input.nextInt();
+            if (numbers[i] % 2 == 0) {
+                counterPairs++;
+            } else {
+                counterOdds++;
+            }
         }
-        do {
-            System.out.println("Introduce an index from 0 to 9");
-            index = input.nextInt();
 
-        } while (index < 0 || index > 9);
+        int[] pairs = new int[counterPairs], odd = new int[counterOdds];
 
-        for (int i = index; i < 9; i++) {
-            numbers[i] = numbers[i + 1];
+        System.out.println("\nList of the pairs");
+        counterPairs = 0;
+        counterOdds = 0;
+
+        for (int i = 0; i < 10; i++) {
+            if (numbers[i] % 2 == 0) {
+                pairs[counterPairs] = numbers[i];
+                counterPairs++;
+            } else {
+                odd[counterOdds] = numbers[i];
+                counterOdds++;
+            }
         }
-        System.out.println("The numbers array is \n");
-        for (int i = 0; i < 9; i++) {
-            System.out.println(numbers[i]);
+        System.out.println("\nThe numbers pairs are:");
+        for (int i = 0; i < counterPairs; i++) {
+            System.out.print(pairs[i]);
         }
-        System.out.println("the arrangement is as follows ");
-        for (int i = 0; i < 6; i++) {
-            System.out.print(numbers[i] + " ");
+        System.out.println("\nThe numbers odd are:");
+        for (int i = 0; i < counterOdds; i++) {
+            System.out.print(odd[i]);
         }
     }
 }
