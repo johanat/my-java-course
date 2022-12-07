@@ -1,50 +1,89 @@
-// exercise vectors o array N.13
+// exercise vectors o array N.14
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int numbers[] = new int[10], counterPairs = 0, counterOdds = 0;
+        int a[] = new int[10], b[] = new int[10], c[] = new int[20];
+        boolean growing = true;
 
+        System.out.println("Introduce the first array");
 
-        int j = 0, r = 0;
-        for (int i = 0; i < 10; i++) {
-            System.out.print((i + 1) + " Introduce a number ");
-            numbers[i] = input.nextInt();
-            if (numbers[i] % 2 == 0) {
-                counterPairs++;
+        do {
+            for (int i = 0; i < 10; i++) {
+                System.out.print((i + 1) + " Introduce a number");
+                a[i] = input.nextInt();
+            }
+            for (int i = 0; i < 9; i++) {
+                if (a[i] > i + 1) {
+                    growing = true;
+                }
+                if (a[i] < i + 1) {
+                    growing = false;
+                    break;
+                }
+            }
+            if (growing == false) {
+                System.out.println("The array is disordered");
+            }
+        } while (growing == false);
+
+        System.out.println("Introduce the second array ");
+
+        do {
+            for (int k = 0; k < 10; k++) {
+                System.out.print((k + 1) + "Introduce a number ");
+                b[k] = input.nextInt();
+            }
+            for (int j = 0; j < 9; j++) {
+                if (b[j] > j + 1) {
+                    growing = true;
+                }
+                if (b[j] < j + 1) {
+                    growing = false;
+                    break;
+                }
+            }
+            if (growing == false) {
+                System.out.println("The number is disordered");
+            }
+
+        } while (growing == false);
+
+        int i = 0, j = 0, k = 0;
+
+        while (i < 10 && j < 10) {
+
+            if (a[i] < b[j]) {
+                c[k] = a[i];
+                i++;
             } else {
-                counterOdds++;
+                c[k] = b[j];
+                j++;
+            }
+            k++;
+        }
+
+        if (i == 10) {
+            while (j < 10) {
+                c[k] = b[j];
+                k++;
+                j++;
+            }
+        } else {
+            while (j == 10) {
+                c[k] = a[i];
+                k++;
+                i++;
             }
         }
-
-        int[] pairs = new int[counterPairs], odd = new int[counterOdds];
-
-        System.out.println("\nList of the pairs");
-        counterPairs = 0;
-        counterOdds = 0;
-
-        for (int i = 0; i < 10; i++) {
-            if (numbers[i] % 2 == 0) {
-                pairs[counterPairs] = numbers[i];
-                counterPairs++;
-            } else {
-                odd[counterOdds] = numbers[i];
-                counterOdds++;
-            }
-        }
-        System.out.println("\nThe numbers pairs are:");
-        for (int i = 0; i < counterPairs; i++) {
-            System.out.print(pairs[i]);
-        }
-        System.out.println("\nThe numbers odd are:");
-        for (int i = 0; i < counterOdds; i++) {
-            System.out.print(odd[i]);
+        System.out.println("The array finaly is ");
+        for (int p = 0; p < 20; p++) {
+            System.out.print(c[p] + " -");
         }
     }
 }
-
 
 
 
