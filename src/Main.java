@@ -1,17 +1,23 @@
 
 public class Main {
+
     public static void main(String[] args) {
-    Circle myCircle= new Circle(3);
-    Rectangle myRectangle = new Rectangle(2,4);
-    Square mySquare= new Square(2);
 
-    PrintCircle printCircle = new PrintCircle(myCircle);
-    PrintRectangle printRectangle = new PrintRectangle(myRectangle);
-    PrintSquare printSquare = new PrintSquare(mySquare);
+    Peon peon = new Peon();
+    Jefe jefe = new Jefe();
+    Secretaria secretaria = new Secretaria();
 
-    printCircle.printArea();
-    printRectangle.printArea();
-    printSquare.printArea();
+    peon.printName();
+    peon.printText("peoncito");
+
+    jefe.printName();
+    jefe.printText("jefecito");
+
+    Empresa empresa = new Empresa();
+
+    empresa.pagarSueldoAEmpleado(jefe);
+    empresa.pagarSueldoAEmpleado(peon);
+    empresa.pagarSueldoAEmpleado(secretaria);
 
     }
 }
