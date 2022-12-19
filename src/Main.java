@@ -1,26 +1,24 @@
 
 public class Main {
 
+    static String msg = "Operación terminada";
+
     public static void main(String[] args) {
 
-    Peon peon = new Peon();
-    Jefe jefe = new Jefe();
-    Secretaria secretaria = new Secretaria();
+        System.out.println("Iniciando subida...");
 
-    peon.printName();
-    peon.printText("peoncito");
-
-    jefe.printName();
-    jefe.printText("jefecito");
-
-    Empresa empresa = new Empresa();
-
-    empresa.pagarSueldoAEmpleado(jefe);
-    empresa.pagarSueldoAEmpleado(peon);
-    empresa.pagarSueldoAEmpleado(secretaria);
-
+        Uploader uploader = new Uploader();
+        uploader.upload(new Listener() {
+            @Override
+            public void yaEsta() {
+                System.out.println("Desde Main: " + msg);
+            }
+        });
     }
 }
+
+
+
 
 
 
