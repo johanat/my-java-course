@@ -52,7 +52,7 @@ public class Main {
         }
 
         sumaStudent += first[num] + second[num] + third[num];
-        
+
         mediaStudent = sumaStudent / 3f;
 
         System.out.println("Media of the position student is  " + mediaStudent);
