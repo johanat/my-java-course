@@ -1,24 +1,21 @@
 
 public class Main {
-
-    static String msg = "Operación terminada";
-
     public static void main(String[] args) {
 
-        System.out.println("Iniciando subida...");
+        Dog myDog = new Dog();
+        Cat myCat = new Cat();
+        Cow myCow = new Cow();
 
-        Uploader uploader = new Uploader();
-        uploader.upload(new Listener() {
-            @Override
-            public void yaEsta() {
-                System.out.println("Desde Main: " + msg);
-            }
-        });
+        Granja myGranja= new Granja();
+
+        myGranja.feed(myDog);
+        myGranja.feed(myCat);
+        myGranja.feed(myCow);
+
+        myDog.sleep(4);
+        myCat.sleep(6);
+        myCow.sleep(1);
+
     }
 }
-
-
-
-
-
 
