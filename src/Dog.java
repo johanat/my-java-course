@@ -1,14 +1,17 @@
-public class Dog implements Animal{
+import java.util.Timer;
+import java.util.TimerTask;
 
-    @Override
-    public void toEat() {
-        System.out.println("I am Dog and go to eat");
+public class Dog {
 
-    }
+    void toEat (Listener listener){
+        System.out.println("The Dog is eating.... ");
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                listener.yaEsta(4);
+            }
+        }, 5000);
 
-    @Override
-    public void sleep( int hours) {
-        System.out.println("I am Dog  will sleep "+ hours+ " horas");
-
-    }
+    };
 }

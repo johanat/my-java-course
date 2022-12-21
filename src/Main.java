@@ -2,20 +2,16 @@
 public class Main {
     public static void main(String[] args) {
 
-        Dog myDog = new Dog();
-        Cat myCat = new Cat();
-        Cow myCow = new Cow();
+        String msj = "( Message of main)";
 
-        Granja myGranja= new Granja();
-
-        myGranja.feed(myDog);
-        myGranja.feed(myCat);
-        myGranja.feed(myCow);
-
-        myDog.sleep(4);
-        myCat.sleep(6);
-        myCow.sleep(1);
-
+        Dog dog = new Dog();
+        dog.toEat(new Listener() {
+            @Override
+            public void yaEsta(int kilos) {
+                System.out.println("Dog finished of eat "+kilos+" kilos"+ msj);
+            }
+        });
     }
 }
+
 
