@@ -1,16 +1,20 @@
 
 public class Main {
     public static void main(String[] args) {
+        Car cocheRent;
+        Car cocheRent2;
 
-        String msj = "( Message of main)";
+        RentalCompany rentalCompany = new RentalCompany();
 
-        Dog dog = new Dog();
-        dog.toEat(new Listener() {
-            @Override
-            public void yaEsta(int kilos) {
-                System.out.println("Dog finished of eat "+kilos+" kilos"+ msj);
-            }
-        });
+        cocheRent=rentalCompany.rent();
+        cocheRent2=rentalCompany.rent();
+
+        System.out.println("I have rented a car " + cocheRent.getModelCar() + " cars disponibles = "+rentalCompany.getTotalAvailableCar() );
+
+        rentalCompany.returm(cocheRent);
+        rentalCompany.returm(cocheRent2);
+        System.out.println("I have "+ rentalCompany.getTotalAvailableCar()+ " disponible");
+
     }
 }
 
