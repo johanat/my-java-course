@@ -1,19 +1,25 @@
 
 public class Main {
     public static void main(String[] args) {
-        Car cocheRent;
-        Car cocheRent2;
 
-        RentalCompany rentalCompany = new RentalCompany();
+        Library library = new Library();
+        Book myBook;
 
-        cocheRent=rentalCompany.rent();
-        cocheRent2=rentalCompany.rent();
+        System.out.println("\n");
+        library.displayTheInventoryCompleteLibrary();
+        library.addANewBook(new Book("La culpa es de la vaca", "Jaime Espinoza", 2021, 200));
 
-        System.out.println("I have rented a car " + cocheRent.getModelCar() + " cars disponibles = "+rentalCompany.getTotalAvailableCar() );
+        myBook = library.searchABookByTitleOrAuthor("El Señor de los anillos ");
 
-        rentalCompany.returm(cocheRent);
-        rentalCompany.returm(cocheRent2);
-        System.out.println("I have "+ rentalCompany.getTotalAvailableCar()+ " disponible");
+        if (myBook == null) {
+            System.out.println("It hasn't found the book");
+        } else {
+            System.out.println("It has found ===>" + myBook);
+        }
+
+        library.removeAnExistingBook(myBook);
+        System.out.println("\n");
+        library.displayTheInventoryCompleteLibrary();
 
     }
 }
