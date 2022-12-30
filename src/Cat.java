@@ -1,33 +1,16 @@
-public class Cat {
+public class Cat implements Pet{
+
     private String name;
     private int age;
-    private float weight;
     private String color;
-    private String mood;
 
-    Cat(String name, int age, float weight, String color, String mood) {
-        this.name = name;
-        this.age = age;
-        this.weight = weight;
-        this.color = color;
-        this.mood = mood;
+    Cat(String name, int age, String color){
+        this.name=name;
+        this.age=age;
+        this.color=color;
     }
-
-    void maulla() {
-        System.out.println("I am " + name + " and am " + mood);
-    }
-
-    void come() {
-        weight = weight + 0.5f;
-    }
-
-    void play() {
-        weight = weight - 0.2f;
-    }
-
     @Override
-    public String toString() {
-        return " Nombre: "+name+" Age: "+age+ " Weight: "+weight+ " Color : "+color+ " Mood: "+ mood;
+    public void play() {
+        System.out.println("Name: "+name+" is played with your mouse toy");
     }
-
 }
