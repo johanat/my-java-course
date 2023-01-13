@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LibraryUI extends JFrame {
 
@@ -21,11 +23,21 @@ public class LibraryUI extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.setSize(new Dimension(670, 600));
+        doMainJob();
     }
 
     public static void main(String[] args) {
         JFrame frame = new LibraryUI();
         frame.setVisible(true);
+    }
+
+    private void doMainJob() {
+        addBook.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
 }
