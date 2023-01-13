@@ -3,6 +3,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class LibraryUI extends JFrame {
 
@@ -36,6 +39,26 @@ public class LibraryUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                if(myTitle.getText().isEmpty() ||  myAuthor.getText().isEmpty() || myYearOfPublish.getText().isEmpty()|| numPages.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Falta campos por llenar");
+                }
+                else{
+
+                    String data = "";
+                    try {
+                        File file = new File("saveLibrary");
+                        Scanner myReader = new Scanner(file);
+                        while (myReader.hasNextLine()) {
+                            //noinspection StringConcatenationInLoop
+                            data += myReader.nextLine();
+                        }
+                        //LibraryInterface.books = LibraryInterface(data);
+
+                    } catch (FileNotFoundException e2) {
+                        throw new RuntimeException(e2);
+                    }
+
+                }
             }
         });
     }
