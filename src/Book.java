@@ -26,4 +26,9 @@ public class Book {
     public int getNumberOfPag() {
         return numberOfPag;
     }
+
+    @Override
+    public String toString() {
+        return "<html> "+"Title: "+title+ "<br/>"+ " Author: "+author+ "<br/>"+"Years of public: "+yearsOfPublic+"<br/>"+ "Num of pag: "+numberOfPag+"<br/>"+"___________"+"<br/>";
+    }
 }
