@@ -1,16 +1,20 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 
 public class Borrowing {
 
-    Book book = new Book("Harry Potter", "J.K rowling", 1997, 256);
+
+    private String[] finals;
+    Book book = new Book(Long.parseLong(finals[0]), "Harry Potter", "J.K rowling", 1997, 256);
 
     User user = new User("Johana", "Morales", "z303629N", "Molar. calle almendro N.5, 1C");
 
     LocalDate dateNow = LocalDate.now();
     LocalDate borrowingDate = dateNow.minusDays(3);
 
-    LocalDate returned = LocalDate.now(); // returned =devolucion
+    LocalDate returned = LocalDate.now(); // returned =devolucion // borrowingdate = fecha de prestamo
     LocalDate returnedDate = LocalDate.of(2022, 1, 10).plusDays(3);
     float penalty = 5;
 

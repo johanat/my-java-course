@@ -26,4 +26,9 @@ public class User {
     public String getDirection() {
         return direction;
     }
+
+    @Override
+    public String toString() {
+        return  "<html> "+" Name: "+name+"<br/>"+" Surname: "+surname+ "<br/>"+ " DNI: "+DNI+ "<br/>"+"Direction: "+direction+"<br/>"+"____________________"+"<br/>";
+    }
 }
