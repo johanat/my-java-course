@@ -23,12 +23,8 @@ public class User {
         return DNI;
     }
 
-    public String getDirection() {
-        return direction;
-    }
-
     @Override
     public String toString() {
-        return  "<html> "+" Name: "+name+"<br/>"+" Surname: "+surname+ "<br/>"+ " DNI: "+DNI+ "<br/>"+"Direction: "+direction+"<br/>"+"____________________"+"<br/>";
+        return "<html> " + " Name: " + name + "<br/>" + " Surname: " + surname + "<br/>" + " DNI: " + DNI + "<br/>" + "Direction: " + direction + "<br/>" + "____________________" + "<br/>";
     }
 }

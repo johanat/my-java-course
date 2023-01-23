@@ -9,10 +9,15 @@ import static java.lang.Long.parseLong;
 public class Utils {
     public static JLabel printBook;
     public static JLabel printUser;
+    public static JLabel printBorrowing;
 
-    Utils(JLabel printBook, JLabel printUser) {
-        Utils.printBook = printBook;
-        Utils.printUser = printUser;
+    Utils() {
+    }
+
+    static public void initialize(JLabel print_Book, JLabel print_User, JLabel print_Borrowing) {
+        printBook = print_Book;
+        printUser = print_User;
+        printBorrowing = print_Borrowing;
     }
 
     static long getId(ArrayList<Book> books) {
@@ -99,12 +104,12 @@ public class Utils {
     static void printfArrayOfUser(ArrayList<User> users) {
 
 
-        String printfVariable = "";
+        StringBuilder printfVariable = new StringBuilder();
 
         for (User user : users) {
-            printfVariable += user.toString();
+            printfVariable.append(user.toString());
         }
-        printUser.setText(printfVariable);
+        printUser.setText(printfVariable.toString());
     }
 
     public static String fromArrayToStringOfUser(ArrayList<User> users) {
@@ -129,6 +134,9 @@ public class Utils {
         return general;
     }
 
+
+    // functions of Borrowing
+
     //Input must be in the format: yyyy-MM-dd. For example, "2005-01-12"
     public static LocalDate fromStringToLocalDate(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -136,8 +144,76 @@ public class Utils {
         return LocalDate.parse(stringDate, formatter);
     }
 
-    public static String fromLocalDateToString(LocalDate localDate) {
-        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return localDate.format(formatters);
+
+    public static ArrayList<Borrowing> fromStringToArrayOfBorrowing(String date1, ArrayList<Book> books, ArrayList<User> myUser) {
+
+        ArrayList<Borrowing> nameBorrowing = new ArrayList<>();
+        String[] finals;
+
+        String[] parts = date1.split("##");
+
+        for (String parte : parts) {
+            finals = parte.split("&");
+            Borrowing borrowing;
+            borrowing = new Borrowing(getBookById(finals[0], books), getUserByDni(finals[1], myUser), fromStringToLocalDate(finals[2]), fromStringToLocalDate(finals[3]));
+            nameBorrowing.add(borrowing);
+        }
+        return nameBorrowing;
     }
+
+    public static String fromArrayToStringOfBorrowing(ArrayList<Borrowing> borrowings, ArrayList<Book> books, ArrayList<User> myUsers) {
+        String general = "";
+
+        int counter = borrowings.size() - 1;
+
+        for (int i = 0; i < borrowings.size(); i++) {
+
+            Long id = borrowings.get(i).book.getId();
+            String dni = borrowings.get(i).user.getDNI();
+            LocalDate borrowingDate = borrowings.get(i).borrowingDate;
+            LocalDate returnDate = borrowings.get(i).returnedDate;
+
+            //noinspection StringConcatenationInLoop
+            general += (id + "&" + dni + "&" + borrowingDate + "&" + returnDate + "&");
+            if (i < counter) {
+                general += "##";
+            }
+        }
+        fromStringToArrayOfBorrowing(general, books, myUsers);
+        return general;
+    }
+
+    static void printfArrayOfBorrowing(ArrayList<Borrowing> borrowings) {
+
+
+        StringBuilder printfVariable = new StringBuilder();
+
+        for (Borrowing borrowing : borrowings) {
+            printfVariable.append(borrowing.toString());
+        }
+        printBorrowing.setText(printfVariable.toString());
+    }
+
+
+    public static Book getBookById(String idText, ArrayList<Book> books) {
+        //String.valueOf ---- used to convert number to string
+        Book myBook = null;
+        for (Book book : books) {
+            if (String.valueOf(book.getId()).equals(idText)) {
+                myBook = book;
+            }
+        }
+        return myBook;
+    }
+
+    public static User getUserByDni(String dni, ArrayList<User> myUsers) {
+        User myUser = null;
+        for (User user : myUsers) {
+            if (String.valueOf(user.getDNI()).equals(dni)) {
+                myUser = user;
+            }
+        }
+        return myUser;
+    }
+
 }
