@@ -12,11 +12,9 @@ public class Book {
         this.yearsOfPublic = yearsOfPublic;
         this.numberOfPag = numberOfPag;
     }
-
     public long getId() {
         return id;
     }
-
     public String getTitle() {
         return title;
     }

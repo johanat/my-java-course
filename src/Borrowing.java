@@ -11,7 +11,6 @@ public class Borrowing {
     LocalDate returned = LocalDate.now();
     LocalDate returnedDate;
 
-
     Borrowing(Book book, User user, LocalDate borrowingDate, LocalDate returnedDate) {
         this.book = book;
         this.user = user;
@@ -39,6 +38,5 @@ public class Borrowing {
     @Override
     public String toString() {
         return "<html> " + " Id: " + getBook().getId() + "<br/>" + " DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
-
     }
 }

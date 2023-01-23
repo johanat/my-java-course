@@ -194,10 +194,7 @@ public class LibraryUI extends JFrame {
 
             }
         });
-
-    }
-
-    ;
+    };
 
     private void doMainJobForBorrowing(JTextField id, JTextField dni, JTextField borrowingDate, JTextField returnDate) {
         //verify what the error is, "missing" fields appear when the fields are filled debug
