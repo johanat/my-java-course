@@ -3,6 +3,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -50,6 +52,7 @@ public class LibraryUI extends JFrame {
     private JTextField bookID;
     private JButton AddBorrowing;
     private JLabel printfBorrowing;
+    private JList list1;
     static ArrayList<Book> books = new ArrayList<>();
     static ArrayList<User> myUsers = new ArrayList<>();
     static ArrayList<Borrowing> myBorrowings = new ArrayList<>();
@@ -121,6 +124,54 @@ public class LibraryUI extends JFrame {
     }
 
     private void doMainJobForBook(JTextField myTitle, JTextField myAuthor, JTextField myYearOfPublish, JTextField numPage) {
+
+        DefaultListModel<Book> dlm = new DefaultListModel<>();
+        Book book1 = new Book(0L, "title1", "Author 1", 2002, 50);
+        Book book2 = new Book(0L, "title2", "Author 2", 2002, 50);
+        Book book3 = new Book(0L, "title3", "Author 3", 2002, 50);
+        Book book4 = new Book(0L, "title4", "Author 4", 2002, 50);
+        dlm.add(0, book1);
+        dlm.add(1, book2);
+        dlm.add(2, book3);
+        dlm.add(3, book4);
+
+        list1.setModel(dlm);
+
+        list1.addMouseListener(new MouseListener() {
+
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JList list = (JList)e.getSource();
+                int index = list.locationToIndex(e.getPoint());
+                System.out.println("The clicked item is index " + index);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+
+//long id, String title, String author, int yearsOfPublic, int numberOfPag
+        //list1
+
         addBook.addActionListener(e -> {
 
             if (myTitle.getText().isEmpty() || myAuthor.getText().isEmpty() ||
