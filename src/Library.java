@@ -12,7 +12,7 @@ public class Library {
 
     void realizeBorrowing(Book book, User user, LocalDate borrowingDate, LocalDate returnedDate) {
 
-        borrowings.add(new Borrowing(book, user, borrowingDate, returnedDate));
+        borrowings.add(new Borrowing( book, user, borrowingDate, returnedDate));
     }
 
     List<Borrowing> getBorrowings() {

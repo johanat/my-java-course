@@ -33,6 +33,11 @@ public class Book {
 
     @Override
     public String toString() {
+        return  title + "  (Author) " + author ;
+    }
+
+    public String toString2() {
         return "<html> " + "Id: " + id + "<br/>" + "Title: " + title + "<br/>" + " Author: " + author + "<br/>" + "Years of public: " + yearsOfPublic + "<br/>" + "Num of pag: " + numberOfPag + "<br/>" + "____________________" + "<br/>";
     }
+
 }

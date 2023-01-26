@@ -8,10 +8,9 @@ public class Borrowing {
     User user;
 
     LocalDate borrowingDate;
-    LocalDate returned = LocalDate.now();
     LocalDate returnedDate;
 
-    Borrowing(Book book, User user, LocalDate borrowingDate, LocalDate returnedDate) {
+    Borrowing(Book book,  User user, LocalDate borrowingDate, LocalDate returnedDate) {
         this.book = book;
         this.user = user;
         this.borrowingDate = borrowingDate;
@@ -21,7 +20,6 @@ public class Borrowing {
     Book getBook() {
         return book;
     }
-
     User getUser() {
         return user;
     }
@@ -31,12 +29,17 @@ public class Borrowing {
     }
 
     LocalDate getReturned() {
-        return returned;
+        return returnedDate;
     }
 
 
     @Override
+
     public String toString() {
-        return "<html> " + " Id: " + getBook().getId() + "<br/>" + " DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
+        return "<html> Id: " +book.getId() +"<br/>" +"Name: "+user.name+"<br/>" +" DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
     }
 }
+
+
+
+

@@ -25,6 +25,11 @@ public class User {
 
     @Override
     public String toString() {
+        return name + "  (Dni) " + DNI;
+    }
+
+    public String toString2() {
         return "<html> " + " Name: " + name + "<br/>" + " Surname: " + surname + "<br/>" + " DNI: " + DNI + "<br/>" + "Direction: " + direction + "<br/>" + "____________________" + "<br/>";
     }
+
 }

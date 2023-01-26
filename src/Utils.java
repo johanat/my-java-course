@@ -58,6 +58,11 @@ public class Utils {
     public static ArrayList<Book> fromStringToArrayOfBook(String general) {
 
         ArrayList<Book> nameBook = new ArrayList<>();
+
+        if (general.isEmpty()) {
+            return nameBook;
+        }
+
         String[] finals;
 
         String[] parts = general.split("##");
@@ -67,6 +72,7 @@ public class Utils {
             Book book;
             book = new Book(parseLong(finals[0]), finals[1], finals[2], Integer.parseInt(finals[3]), Integer.parseInt(finals[4]));
             nameBook.add(book);
+
         }
         return nameBook;
     }
@@ -79,7 +85,7 @@ public class Utils {
         for (Book book : books) {
 
             //noinspection StringConcatenationInLoop
-            printfVariable += book.toString();
+            printfVariable += book.toString2();
         }
         printBook.setText(printfVariable);
     }
@@ -87,7 +93,12 @@ public class Utils {
     //functions of User
     public static ArrayList<User> fromStringToArrayOfUser(String date1) {
 
+
         ArrayList<User> nameUser = new ArrayList<>();
+
+        if(date1.isEmpty()){
+            return nameUser;
+        }
         String[] finals;
 
         String[] parts = date1.split("##");
@@ -107,7 +118,7 @@ public class Utils {
         StringBuilder printfVariable = new StringBuilder();
 
         for (User user : users) {
-            printfVariable.append(user.toString());
+            printfVariable.append(user.toString2());
         }
         printUser.setText(printfVariable.toString());
     }
@@ -134,7 +145,6 @@ public class Utils {
         return general;
     }
 
-
     // functions of Borrowing
 
     //Input must be in the format: yyyy-MM-dd. For example, "2005-01-12"
@@ -148,6 +158,10 @@ public class Utils {
     public static ArrayList<Borrowing> fromStringToArrayOfBorrowing(String date1, ArrayList<Book> books, ArrayList<User> myUser) {
 
         ArrayList<Borrowing> nameBorrowing = new ArrayList<>();
+
+        if(date1.isEmpty()){
+            return nameBorrowing;
+        }
         String[] finals;
 
         String[] parts = date1.split("##");
@@ -161,7 +175,7 @@ public class Utils {
         return nameBorrowing;
     }
 
-    public static String fromArrayToStringOfBorrowing(ArrayList<Borrowing> borrowings, ArrayList<Book> books, ArrayList<User> myUsers) {
+    public static String fromArrayToStringOfBorrowing(ArrayList<Borrowing> borrowings) {
         String general = "";
 
         int counter = borrowings.size() - 1;
@@ -179,19 +193,19 @@ public class Utils {
                 general += "##";
             }
         }
-        fromStringToArrayOfBorrowing(general, books, myUsers);
+
         return general;
     }
 
     static void printfArrayOfBorrowing(ArrayList<Borrowing> borrowings) {
 
 
-        StringBuilder printfVariable = new StringBuilder();
+        StringBuilder printfBorrowing = new StringBuilder();
 
         for (Borrowing borrowing : borrowings) {
-            printfVariable.append(borrowing.toString());
+            printfBorrowing.append(borrowing.toString());
         }
-        printBorrowing.setText(printfVariable.toString());
+        printBorrowing.setText(printfBorrowing.toString());
     }
 
 
