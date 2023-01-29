@@ -7,14 +7,14 @@ import java.util.Locale;
 import static java.lang.Long.parseLong;
 
 public class Utils {
-    public static JLabel printBook;
+    public static JList printBook;
     public static JLabel printUser;
     public static JLabel printBorrowing;
 
     Utils() {
     }
 
-    static public void initialize(JLabel print_Book, JLabel print_User, JLabel print_Borrowing) {
+    static public void initialize(JList print_Book, JLabel print_User, JLabel print_Borrowing) {
         printBook = print_Book;
         printUser = print_User;
         printBorrowing = print_Borrowing;
@@ -33,7 +33,7 @@ public class Utils {
     }
 
 
-    public static String fromArrayToStringOfBook(ArrayList<Book> books) {
+    public static String fromArrayToStringOfBook(DefaultListModel<Book> books) {
         String general = "";
 
         int counter = books.size() - 1;
@@ -72,22 +72,8 @@ public class Utils {
             Book book;
             book = new Book(parseLong(finals[0]), finals[1], finals[2], Integer.parseInt(finals[3]), Integer.parseInt(finals[4]));
             nameBook.add(book);
-
         }
         return nameBook;
-    }
-
-    static void printfArrayOfBooks(ArrayList<Book> books) {
-
-
-        String printfVariable = "";
-
-        for (Book book : books) {
-
-            //noinspection StringConcatenationInLoop
-            printfVariable += book.toString2();
-        }
-        printBook.setText(printfVariable);
     }
 
     //functions of User
@@ -112,28 +98,19 @@ public class Utils {
         return nameUser;
     }
 
-    static void printfArrayOfUser(ArrayList<User> users) {
 
 
-        StringBuilder printfVariable = new StringBuilder();
-
-        for (User user : users) {
-            printfVariable.append(user.toString2());
-        }
-        printUser.setText(printfVariable.toString());
-    }
-
-    public static String fromArrayToStringOfUser(ArrayList<User> users) {
+    public static String fromArrayToStringOfUser(DefaultListModel<User> myUsers) {
         String general = "";
 
-        int counter = users.size() - 1;
+        int counter = myUsers.size() - 1;
 
-        for (int i = 0; i < users.size(); i++) {
+        for (int i = 0; i < myUsers.size(); i++) {
 
-            String name = users.get(i).getName();
-            String surname = users.get(i).getSurname();
-            String dni = users.get(i).getDNI();
-            String direction = users.get(i).direction;
+            String name = myUsers.get(i).getName();
+            String surname = myUsers.get(i).getSurname();
+            String dni = myUsers.get(i).getDNI();
+            String direction = myUsers.get(i).direction;
 
             //noinspection StringConcatenationInLoop
             general += (name + "&" + surname + "&" + dni + "&" + direction + "&");
@@ -154,8 +131,7 @@ public class Utils {
         return LocalDate.parse(stringDate, formatter);
     }
 
-
-    public static ArrayList<Borrowing> fromStringToArrayOfBorrowing(String date1, ArrayList<Book> books, ArrayList<User> myUser) {
+    public static ArrayList<Borrowing> fromStringToArrayOfBorrowing(String date1, DefaultListModel<Book> books, ArrayList<User> myUser) {
 
         ArrayList<Borrowing> nameBorrowing = new ArrayList<>();
 
@@ -209,12 +185,14 @@ public class Utils {
     }
 
 
-    public static Book getBookById(String idText, ArrayList<Book> books) {
+    public static Book getBookById(String idText, DefaultListModel<Book> listBooks) {
         //String.valueOf ---- used to convert number to string
         Book myBook = null;
-        for (Book book : books) {
-            if (String.valueOf(book.getId()).equals(idText)) {
-                myBook = book;
+
+        for (int i = 0; i < listBooks.size(); i++) {
+            Book book = listBooks.get(i);
+            if(idText.equals(String.valueOf(listBooks.get(i).getId())) ){
+                myBook= book;
             }
         }
         return myBook;

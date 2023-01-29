@@ -3,6 +3,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -52,8 +54,14 @@ public class LibraryUI extends JFrame {
     private JLabel printfBorrowing;
     public JComboBox bookComboBox;
     public JComboBox userComboBox;
-    static ArrayList<Book> books = new ArrayList<>();
+    private JList list1Book;
+    private JButton removeBook;
+    private JList list1User;
+    private JButton removeUser;
+    static ArrayList<Book> myBooks = new ArrayList<>();
     static ArrayList<User> myUsers = new ArrayList<>();
+    DefaultListModel<Book> dlmBook = new DefaultListModel<>();
+    DefaultListModel<User> dlmUser = new DefaultListModel<>();
     static ArrayList<Borrowing> myBorrowings = new ArrayList<>();
     boolean update1;
     boolean update2;
@@ -67,11 +75,12 @@ public class LibraryUI extends JFrame {
         this.setContentPane(mainPanel);
         this.setSize(new Dimension(670, 600));
 
-        Utils.initialize(printOfBook, printfUser, printfBorrowing);
+        Utils.initialize(list1Book, printfUser, printfBorrowing);
 
         doMainJobForBook(myTitle, myAuthor, myYearOfPublish, numPages);
         doMainJobForUser(name, surname, dni_User, direction);
         doMainJobForBorrowing(bookComboBox, userComboBox, borrowingDate, returnDate);
+
     }
 
 
@@ -89,11 +98,10 @@ public class LibraryUI extends JFrame {
 
                 data.append(myReader.nextLine());
             }
-            books = Utils.fromStringToArrayOfBook(data.toString());
+            myBooks = Utils.fromStringToArrayOfBook(data.toString());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        Utils.printfArrayOfBooks(books);
     }
 
     private void loadUserFromFileToArray() {
@@ -108,7 +116,7 @@ public class LibraryUI extends JFrame {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        Utils.printfArrayOfUser(myUsers);
+
     }
 
     private void loadBorrowingFromFileToArray() {
@@ -120,7 +128,7 @@ public class LibraryUI extends JFrame {
             while (myReader.hasNextLine()) {
                 data2.append(myReader.nextLine());
             }
-            myBorrowings = Utils.fromStringToArrayOfBorrowing(data2.toString(), books, myUsers);
+            myBorrowings = Utils.fromStringToArrayOfBorrowing(data2.toString(), dlmBook, myUsers);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -132,11 +140,65 @@ public class LibraryUI extends JFrame {
         loadBooksFromFileToArray();
 
         DefaultComboBoxModel model = new DefaultComboBoxModel<Book>();
-        for (int i = 0; i < books.size(); i++) {
-            model.addElement(books.get(i));
+        for (int i = 0; i < myBooks.size(); i++) {
+            model.addElement(myBooks.get(i));
         }
         bookComboBox.setModel(model);
         Book selectedBook = (Book) bookComboBox.getSelectedItem();
+
+
+        for (int i = 0; i < myBooks.size(); i++) {
+            dlmBook.add(i, myBooks.get(i));
+        }
+        list1Book.setModel(dlmBook);
+
+        list1Book.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                list1Book = (JList) e.getSource();
+
+                int index = list1Book.locationToIndex(e.getPoint());
+
+                myTitle.setText(dlmBook.get(index).getTitle());
+                myAuthor.setText(dlmBook.get(index).getAuthor());
+                myYearOfPublish.setText(String.valueOf(dlmBook.get(index).getYearsOfPublic()));
+                numPage.setText(String.valueOf(dlmBook.get(index).getNumberOfPag()));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        removeBook.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                dlmBook.remove(list1Book.getSelectedIndex());
+
+                myTitle.setText("");
+                myAuthor.setText("");
+                myYearOfPublish.setText("");
+                numPages.setText("");
+                saveArrayInTheFileBook(dlmBook);
+            }
+        });
 
         addBook.addActionListener(e -> {
 
@@ -145,7 +207,7 @@ public class LibraryUI extends JFrame {
                 JOptionPane.showMessageDialog(null, "Missing fields to fill ");
             } else {
                 if (!update1) {
-                    long millis = Utils.getId(books);
+                    long millis = Utils.getId(myBooks);
                     String titleText = myTitle.getText();
                     String authorText = myAuthor.getText();
                     String yearsPublicText = myYearOfPublish.getText();
@@ -158,37 +220,108 @@ public class LibraryUI extends JFrame {
                     myYearOfPublish.setText("");
                     numPages.setText("");
 
-                    books.add(book);
+                    //myBooks.add(book);
 
                     model.addElement(book);
+                    dlmBook.addElement(book);
                     bookComboBox.setModel(model);
 
-                    Utils.printfArrayOfBooks(books);
+                    saveArrayInTheFileBook(dlmBook);
                 }
             }
 
-            try {
-                FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveLibrary");
-                String dataBook = Utils.fromArrayToStringOfBook(books);
-
-                fw.write(dataBook);
-                fw.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
+    }
+
+    void saveArrayInTheFileBook(DefaultListModel<Book> dlmBook) {
+        try {
+            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveLibrary");
+            //  String dataBook = Utils.fromArrayToStringOfBook(books);
+            String dataBook = Utils.fromArrayToStringOfBook(dlmBook);
+
+
+            fw.write(dataBook);
+            fw.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+    void saveArrayInTheFileUser(DefaultListModel<User> dlmUser){
+        try {
+            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveUser");
+
+            String dataUser = Utils.fromArrayToStringOfUser(dlmUser);
+
+            fw.write(dataUser);
+            fw.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     private void doMainJobForUser(JTextField name, JTextField surname, JTextField dni, JTextField direction) {
 
         loadUserFromFileToArray();
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel<User>();
+        DefaultComboBoxModel modelUser = new DefaultComboBoxModel<User>();
         for (int i = 0; i < myUsers.size(); i++) {
-            model.addElement(myUsers.get(i));
+            modelUser.addElement(myUsers.get(i));
         }
-        userComboBox.setModel(model);
+        userComboBox.setModel(modelUser);
         User selectedUser = (User) userComboBox.getSelectedItem();
+
+
+        for (int i = 0; i < myUsers.size(); i++) {
+            dlmUser.add(i, myUsers.get(i));
+        }
+        list1User.setModel(dlmUser);
+
+        list1User.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                list1User = (JList) e.getSource();
+
+                int index = list1User.locationToIndex(e.getPoint());
+
+                name.setText(dlmUser.get(index).name);
+                surname.setText(dlmUser.get(index).surname);
+                dni.setText(dlmUser.get(index).DNI);
+                direction.setText(dlmUser.get(index).direction);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+        removeUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dlmUser.remove(list1User.getSelectedIndex());
+
+                name.setText("");
+                surname.setText("");
+                dni.setText("");
+                direction.setText("");
+                saveArrayInTheFileUser(dlmUser);
+            }
+        });
 
         addUser.addActionListener(new ActionListener() {
             @Override
@@ -210,23 +343,14 @@ public class LibraryUI extends JFrame {
                         dni.setText("");
                         direction.setText("");
 
-                        myUsers.add(user);
+                        //myUsers.add(user);
 
-                        model.addElement(user);
-                        userComboBox.setModel(model);
+                        modelUser.addElement(user);
+                        dlmUser.addElement(user);
+                        userComboBox.setModel(modelUser);
 
-                        Utils.printfArrayOfUser(myUsers);
+                        saveArrayInTheFileUser(dlmUser);
                     }
-                }
-                try {
-                    FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveUser");
-
-                    String dataUser = Utils.fromArrayToStringOfUser(myUsers);
-
-                    fw.write(dataUser);
-                    fw.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -250,13 +374,11 @@ public class LibraryUI extends JFrame {
                     String borrowingDateText = borrowingDate.getText();
                     String returnDateText = returnDate.getText();
 
-                    Borrowing borrowing = new Borrowing(Utils.getBookById(idText, books), Utils.getUserByDni(dniText, myUsers), Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDateText));
+                    Borrowing borrowing = new Borrowing(Utils.getBookById(idText, dlmBook), Utils.getUserByDni(dniText, myUsers), Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDateText));
 
                     myBorrowings.add(borrowing);
                     borrowingDate.setText("");
                     returnDate.setText("");
-
-
 
                     Utils.printfArrayOfBorrowing(myBorrowings);
                 }
@@ -272,5 +394,7 @@ public class LibraryUI extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
-    };
+    }
+
+    ;
 }
