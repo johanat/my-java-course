@@ -131,6 +131,7 @@ public class Utils {
         return LocalDate.parse(stringDate, formatter);
     }
 
+
     public static ArrayList<Borrowing> fromStringToArrayOfBorrowing(String date1, DefaultListModel<Book> books, ArrayList<User> myUser) {
 
         ArrayList<Borrowing> nameBorrowing = new ArrayList<>();
@@ -151,7 +152,7 @@ public class Utils {
         return nameBorrowing;
     }
 
-    public static String fromArrayToStringOfBorrowing(ArrayList<Borrowing> borrowings) {
+    public static String fromArrayToStringOfBorrowing(DefaultListModel<Borrowing> borrowings) {
         String general = "";
 
         int counter = borrowings.size() - 1;
@@ -171,17 +172,6 @@ public class Utils {
         }
 
         return general;
-    }
-
-    static void printfArrayOfBorrowing(ArrayList<Borrowing> borrowings) {
-
-
-        StringBuilder printfBorrowing = new StringBuilder();
-
-        for (Borrowing borrowing : borrowings) {
-            printfBorrowing.append(borrowing.toString());
-        }
-        printBorrowing.setText(printfBorrowing.toString());
     }
 
 

@@ -40,29 +40,30 @@ public class LibraryUI extends JFrame {
     private JTextField myYearOfPublish;
     private JTextField numPages;
     private JButton addBook;
-    private JLabel printOfBook;
     private JButton addUser;
     private JTextField name;
     private JTextField surname;
     private JTextField dni_User;
     private JTextField direction;
-    private JLabel printfUser;
     private JTextField borrowingDate;
     private JTextField returnDate;
     private JButton AddBorrowing;
     private JPanel mainPanel;
-    private JLabel printfBorrowing;
     public JComboBox bookComboBox;
     public JComboBox userComboBox;
     private JList list1Book;
     private JButton removeBook;
     private JList list1User;
     private JButton removeUser;
+    private JList list1Borrowing;
+    private JButton removeBorrowing;
     static ArrayList<Book> myBooks = new ArrayList<>();
     static ArrayList<User> myUsers = new ArrayList<>();
     DefaultListModel<Book> dlmBook = new DefaultListModel<>();
     DefaultListModel<User> dlmUser = new DefaultListModel<>();
+    DefaultListModel<Borrowing> dlmBorrowing = new DefaultListModel<>();
     static ArrayList<Borrowing> myBorrowings = new ArrayList<>();
+    DefaultComboBoxModel modelUser = new DefaultComboBoxModel<User>();
     boolean update1;
     boolean update2;
     boolean update3;
@@ -75,12 +76,9 @@ public class LibraryUI extends JFrame {
         this.setContentPane(mainPanel);
         this.setSize(new Dimension(670, 600));
 
-        Utils.initialize(list1Book, printfUser, printfBorrowing);
-
         doMainJobForBook(myTitle, myAuthor, myYearOfPublish, numPages);
         doMainJobForUser(name, surname, dni_User, direction);
         doMainJobForBorrowing(bookComboBox, userComboBox, borrowingDate, returnDate);
-
     }
 
 
@@ -116,7 +114,6 @@ public class LibraryUI extends JFrame {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void loadBorrowingFromFileToArray() {
@@ -132,7 +129,6 @@ public class LibraryUI extends JFrame {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        Utils.printfArrayOfBorrowing(myBorrowings);
     }
 
     private void doMainJobForBook(JTextField myTitle, JTextField myAuthor, JTextField myYearOfPublish, JTextField numPage) {
@@ -220,8 +216,6 @@ public class LibraryUI extends JFrame {
                     myYearOfPublish.setText("");
                     numPages.setText("");
 
-                    //myBooks.add(book);
-
                     model.addElement(book);
                     dlmBook.addElement(book);
                     bookComboBox.setModel(model);
@@ -229,7 +223,6 @@ public class LibraryUI extends JFrame {
                     saveArrayInTheFileBook(dlmBook);
                 }
             }
-
         });
     }
 
@@ -247,7 +240,8 @@ public class LibraryUI extends JFrame {
         }
 
     }
-    void saveArrayInTheFileUser(DefaultListModel<User> dlmUser){
+
+    void saveArrayInTheFileUser(DefaultListModel<User> dlmUser) {
         try {
             FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveUser");
 
@@ -260,15 +254,29 @@ public class LibraryUI extends JFrame {
         }
     }
 
+    void saveArrayInTheFileBorrowing(DefaultListModel<Borrowing> dlmBorrowing) {
+        try {
+            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveBorrowing");
+
+            String dataBorrowing = Utils.fromArrayToStringOfBorrowing(dlmBorrowing);
+
+            fw.write(dataBorrowing);
+            fw.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private void doMainJobForUser(JTextField name, JTextField surname, JTextField dni, JTextField direction) {
 
         loadUserFromFileToArray();
 
-        DefaultComboBoxModel modelUser = new DefaultComboBoxModel<User>();
+
         for (int i = 0; i < myUsers.size(); i++) {
             modelUser.addElement(myUsers.get(i));
         }
         userComboBox.setModel(modelUser);
+
         User selectedUser = (User) userComboBox.getSelectedItem();
 
 
@@ -343,7 +351,7 @@ public class LibraryUI extends JFrame {
                         dni.setText("");
                         direction.setText("");
 
-                        //myUsers.add(user);
+                        myUsers.add(user);
 
                         modelUser.addElement(user);
                         dlmUser.addElement(user);
@@ -357,12 +365,62 @@ public class LibraryUI extends JFrame {
     };
 
     private void doMainJobForBorrowing(JComboBox bookComboBox, JComboBox userComboBox, JTextField borrowingDate, JTextField returnDate) {
+
+
         loadBorrowingFromFileToArray();
+
+        for (int i = 0; i < myBorrowings.size(); i++) {
+            dlmBorrowing.add(i, myBorrowings.get(i));
+        }
+        list1Borrowing.setModel(dlmBorrowing);
+
+        list1Borrowing.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                list1Borrowing = (JList) e.getSource();
+
+                int index = list1Borrowing.locationToIndex(e.getPoint());
+
+                borrowingDate.setText(dlmBorrowing.get(list1Borrowing.getSelectedIndex()).borrowingDate.toString());
+                returnDate.setText(dlmBorrowing.get(list1Borrowing.getSelectedIndex()).returnedDate.toString());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        removeBorrowing.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dlmBorrowing.remove(list1Borrowing.getSelectedIndex());
+
+                borrowingDate.setText("");
+                returnDate.setText("");
+
+                saveArrayInTheFileBorrowing(dlmBorrowing);
+            }
+        });
 
         //verify what the error is, "missing" fields appear when the fields are filled debug
         AddBorrowing.addActionListener(e -> {
             Book selectedBook = (Book) bookComboBox.getSelectedItem();
-            User selectedUser = (User) userComboBox.getSelectedItem();
+            User selectedUsers = (User) userComboBox.getSelectedItem();
 
             if (((Book) bookComboBox.getSelectedItem()).toString2().isEmpty() || ((User) userComboBox.getSelectedItem()).toString2().isEmpty() ||
                     borrowingDate.getText().isEmpty() || returnDate.getText().isEmpty()) {
@@ -376,25 +434,14 @@ public class LibraryUI extends JFrame {
 
                     Borrowing borrowing = new Borrowing(Utils.getBookById(idText, dlmBook), Utils.getUserByDni(dniText, myUsers), Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDateText));
 
-                    myBorrowings.add(borrowing);
                     borrowingDate.setText("");
                     returnDate.setText("");
 
-                    Utils.printfArrayOfBorrowing(myBorrowings);
+                    myBorrowings.add(borrowing);
+                    dlmBorrowing.addElement(borrowing);
+                    saveArrayInTheFileBorrowing(dlmBorrowing);
                 }
             }
-            try {
-                FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveBorrowing");
-
-                String dataBorrowing = Utils.fromArrayToStringOfBorrowing(myBorrowings);
-
-                fw.write(dataBorrowing);
-                fw.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         });
-    }
-
-    ;
+    };
 }

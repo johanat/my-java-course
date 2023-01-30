@@ -1,4 +1,4 @@
-import javax.swing.*;
+
 import java.time.LocalDate;
 
 
@@ -36,9 +36,11 @@ public class Borrowing {
 
     @Override
 
+
     public String toString() {
         return "<html> Id: "+book.getId() +"<br/>" +"Name: "+user.name+"<br/>" +" DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
     }
+
 }
 
 
