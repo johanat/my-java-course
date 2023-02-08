@@ -1,14 +1,15 @@
+import com.raven.datechooser.DateChooser;
+import com.raven.datechooser.SelectedDate;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,28 +46,35 @@ public class LibraryUI extends JFrame {
     private JTextField surname;
     private JTextField dni_User;
     private JTextField direction;
-    private JTextField borrowingDate;
-    private JTextField returnDate;
+    // private JTextField borrowingDate;
+    // private JTextField returnDate;
     private JButton AddBorrowing;
     private JPanel mainPanel;
     public JComboBox bookComboBox;
     public JComboBox userComboBox;
-    private JList list1Book;
+    private JList booksJList;
     private JButton removeBook;
-    private JList list1User;
+    private JList usersJList;
     private JButton removeUser;
-    private JList list1Borrowing;
+    private JList borrowingsJList;
     private JButton removeBorrowing;
+    private DateChooser caledarBorrowing;
+    private DateChooser caledarReturn;
+    private JTextField bookSearcher;
+    private JTextField userSearcher;
+    private DateChooser myCalendar;
     static ArrayList<Book> myBooks = new ArrayList<>();
     static ArrayList<User> myUsers = new ArrayList<>();
-    DefaultListModel<Book> dlmBook = new DefaultListModel<>();
-    DefaultListModel<User> dlmUser = new DefaultListModel<>();
-    DefaultListModel<Borrowing> dlmBorrowing = new DefaultListModel<>();
+    DefaultListModel<Book> booksListModel = new DefaultListModel<>();
+    DefaultListModel<User> usersListModel = new DefaultListModel<>();
+    DefaultListModel<Borrowing> borrowingsListModel = new DefaultListModel<>();
     static ArrayList<Borrowing> myBorrowings = new ArrayList<>();
-    DefaultComboBoxModel modelUser = new DefaultComboBoxModel<User>();
+    DefaultComboBoxModel usersComboBoxModel = new DefaultComboBoxModel<User>();
     boolean update1;
     boolean update2;
     boolean update3;
+
+    DefaultComboBoxModel booksComboBoxModel = new DefaultComboBoxModel<Book>();
 
 
     LibraryUI() {
@@ -78,7 +86,7 @@ public class LibraryUI extends JFrame {
 
         doMainJobForBook(myTitle, myAuthor, myYearOfPublish, numPages);
         doMainJobForUser(name, surname, dni_User, direction);
-        doMainJobForBorrowing(bookComboBox, userComboBox, borrowingDate, returnDate);
+        doMainJobForBorrowing(bookComboBox);
     }
 
 
@@ -125,7 +133,7 @@ public class LibraryUI extends JFrame {
             while (myReader.hasNextLine()) {
                 data2.append(myReader.nextLine());
             }
-            myBorrowings = Utils.fromStringToArrayOfBorrowing(data2.toString(), dlmBook, myUsers);
+            myBorrowings = Utils.fromStringToArrayOfBorrowing(data2.toString(), booksListModel, myUsers);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -135,30 +143,29 @@ public class LibraryUI extends JFrame {
 
         loadBooksFromFileToArray();
 
-        DefaultComboBoxModel model = new DefaultComboBoxModel<Book>();
         for (int i = 0; i < myBooks.size(); i++) {
-            model.addElement(myBooks.get(i));
+            booksComboBoxModel.addElement(myBooks.get(i));
         }
-        bookComboBox.setModel(model);
+        bookComboBox.setModel(booksComboBoxModel);
         Book selectedBook = (Book) bookComboBox.getSelectedItem();
 
 
         for (int i = 0; i < myBooks.size(); i++) {
-            dlmBook.add(i, myBooks.get(i));
+            booksListModel.add(i, myBooks.get(i));
         }
-        list1Book.setModel(dlmBook);
+        booksJList.setModel(booksListModel);
 
-        list1Book.addMouseListener(new MouseListener() {
+        booksJList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                list1Book = (JList) e.getSource();
+                booksJList = (JList) e.getSource();
 
-                int index = list1Book.locationToIndex(e.getPoint());
+                int index = booksJList.locationToIndex(e.getPoint());
 
-                myTitle.setText(dlmBook.get(index).getTitle());
-                myAuthor.setText(dlmBook.get(index).getAuthor());
-                myYearOfPublish.setText(String.valueOf(dlmBook.get(index).getYearsOfPublic()));
-                numPage.setText(String.valueOf(dlmBook.get(index).getNumberOfPag()));
+                myTitle.setText(booksListModel.get(index).getTitle());
+                myAuthor.setText(booksListModel.get(index).getAuthor());
+                myYearOfPublish.setText(String.valueOf(booksListModel.get(index).getYearsOfPublic()));
+                numPage.setText(String.valueOf(booksListModel.get(index).getNumberOfPag()));
             }
 
             @Override
@@ -186,41 +193,66 @@ public class LibraryUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                dlmBook.remove(list1Book.getSelectedIndex());
+                booksListModel.remove(booksJList.getSelectedIndex());
 
                 myTitle.setText("");
                 myAuthor.setText("");
                 myYearOfPublish.setText("");
                 numPages.setText("");
-                saveArrayInTheFileBook(dlmBook);
+                saveArrayInTheFileBook(booksListModel);
+            }
+        });
+        bookSearcher.addKeyListener(new KeyListener() {
+
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String frase = bookSearcher.getText();
+
+                booksListModel.removeAllElements();
+                for (int i = 0; i < myBooks.size(); i++) {
+                    if (myBooks.get(i).getTitle().contains(frase)) {
+                        booksListModel.addElement(myBooks.get(i));
+                    }
+                    booksJList.setModel(booksListModel);
+                }
             }
         });
 
         addBook.addActionListener(e -> {
 
-            if (myTitle.getText().isEmpty() || myAuthor.getText().isEmpty() ||
-                    myYearOfPublish.getText().isEmpty() || numPage.getText().isEmpty()) {
+            if (myTitle.getText().isEmpty() || myAuthor.getText().isEmpty() || myYearOfPublish.getText().isEmpty() || numPage.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Missing fields to fill ");
             } else {
                 if (!update1) {
+                    int totalBooks = 5;
                     long millis = Utils.getId(myBooks);
                     String titleText = myTitle.getText();
                     String authorText = myAuthor.getText();
                     String yearsPublicText = myYearOfPublish.getText();
                     String numPag = numPages.getText();
 
-                    Book book = new Book(millis, titleText, authorText, Integer.parseInt(yearsPublicText), Integer.parseInt(numPag));
+                    Book book = new Book( totalBooks,millis, titleText, authorText, Integer.parseInt(yearsPublicText), Integer.parseInt(numPag));
 
                     myTitle.setText("");
                     myAuthor.setText("");
                     myYearOfPublish.setText("");
                     numPages.setText("");
 
-                    model.addElement(book);
-                    dlmBook.addElement(book);
-                    bookComboBox.setModel(model);
+                    booksComboBoxModel.addElement(book);
+                    booksListModel.addElement(book);
+                    bookComboBox.setModel(booksComboBoxModel);
 
-                    saveArrayInTheFileBook(dlmBook);
+
+                    saveArrayInTheFileBook(booksListModel);
                 }
             }
         });
@@ -238,7 +270,6 @@ public class LibraryUI extends JFrame {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
     }
 
     void saveArrayInTheFileUser(DefaultListModel<User> dlmUser) {
@@ -273,29 +304,28 @@ public class LibraryUI extends JFrame {
 
 
         for (int i = 0; i < myUsers.size(); i++) {
-            modelUser.addElement(myUsers.get(i));
+            usersComboBoxModel.addElement(myUsers.get(i));
         }
-        userComboBox.setModel(modelUser);
-
-        User selectedUser = (User) userComboBox.getSelectedItem();
+        userComboBox.setModel(usersComboBoxModel);
 
 
         for (int i = 0; i < myUsers.size(); i++) {
-            dlmUser.add(i, myUsers.get(i));
+            usersListModel.add(i, myUsers.get(i));
         }
-        list1User.setModel(dlmUser);
+        usersJList.setModel(usersListModel);
 
-        list1User.addMouseListener(new MouseListener() {
+        usersJList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                list1User = (JList) e.getSource();
+                usersJList = (JList) e.getSource();
 
-                int index = list1User.locationToIndex(e.getPoint());
+                int index1 = usersJList.locationToIndex(e.getPoint());
 
-                name.setText(dlmUser.get(index).name);
-                surname.setText(dlmUser.get(index).surname);
-                dni.setText(dlmUser.get(index).DNI);
-                direction.setText(dlmUser.get(index).direction);
+
+                name.setText(usersListModel.get(index1).name);
+                surname.setText(usersListModel.get(index1).surname);
+                dni.setText(usersListModel.get(index1).DNI);
+                direction.setText(usersListModel.get(index1).direction);
             }
 
             @Override
@@ -321,21 +351,45 @@ public class LibraryUI extends JFrame {
         removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dlmUser.remove(list1User.getSelectedIndex());
+                usersListModel.remove(usersJList.getSelectedIndex());
 
                 name.setText("");
                 surname.setText("");
                 dni.setText("");
                 direction.setText("");
-                saveArrayInTheFileUser(dlmUser);
+                saveArrayInTheFileUser(usersListModel);
             }
+        });
+        userSearcher.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+                String frase = userSearcher.getText();
+
+                usersListModel.removeAllElements();
+                for (int i = 0; i < myUsers.size(); i++) {
+                    if (myUsers.get(i).name.contains(frase)) {
+                        usersListModel.addElement(myUsers.get(i));
+                    }
+                    usersJList.setModel(usersListModel);
+                }
+            }
+
         });
 
         addUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (name.getText().isEmpty() || surname.getText().isEmpty() ||
-                        dni.getText().isEmpty() || direction.getText().isEmpty()) {
+                if (name.getText().isEmpty() || surname.getText().isEmpty() || dni.getText().isEmpty() || direction.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Missing fields to fill");
                 } else {
                     if (!update2) {
@@ -353,37 +407,63 @@ public class LibraryUI extends JFrame {
 
                         myUsers.add(user);
 
-                        modelUser.addElement(user);
-                        dlmUser.addElement(user);
-                        userComboBox.setModel(modelUser);
+                        usersComboBoxModel.addElement(user);
+                        usersListModel.addElement(user);
+                        userComboBox.setModel(usersComboBoxModel);
 
-                        saveArrayInTheFileUser(dlmUser);
+                        saveArrayInTheFileUser(usersListModel);
                     }
                 }
             }
         });
-    };
+    }
 
-    private void doMainJobForBorrowing(JComboBox bookComboBox, JComboBox userComboBox, JTextField borrowingDate, JTextField returnDate) {
+    ;
+
+
+    private void doMainJobForBorrowing(JComboBox bookComboBox) {
 
 
         loadBorrowingFromFileToArray();
 
         for (int i = 0; i < myBorrowings.size(); i++) {
-            dlmBorrowing.add(i, myBorrowings.get(i));
+            borrowingsListModel.add(i, myBorrowings.get(i));
         }
-        list1Borrowing.setModel(dlmBorrowing);
+        borrowingsJList.setModel(borrowingsListModel);
 
-        list1Borrowing.addMouseListener(new MouseListener() {
+        borrowingsJList.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
 
-                list1Borrowing = (JList) e.getSource();
+                borrowingsJList = (JList) e.getSource();
 
-                int index = list1Borrowing.locationToIndex(e.getPoint());
+                int index = borrowingsJList.locationToIndex(e.getPoint());
 
-                borrowingDate.setText(dlmBorrowing.get(list1Borrowing.getSelectedIndex()).borrowingDate.toString());
-                returnDate.setText(dlmBorrowing.get(list1Borrowing.getSelectedIndex()).returnedDate.toString());
+
+                int selectedIndexBook = findComboBoxIndexById(borrowingsListModel.get(index));
+                bookComboBox.setSelectedIndex(selectedIndexBook);
+
+
+                int selectedIndexUser = findComboBoxIndexByDni(borrowingsListModel.get(index));
+                userComboBox.setSelectedIndex(selectedIndexUser);
+
+
+                SelectedDate selectedDateBorrowing = new SelectedDate();
+                selectedDateBorrowing.setDay(borrowingsListModel.get(index).borrowingDate.getDayOfMonth() );
+                selectedDateBorrowing.setMonth(borrowingsListModel.get(index).borrowingDate.getMonthValue());
+                selectedDateBorrowing.setYear(borrowingsListModel.get(index).borrowingDate.getYear());
+                caledarBorrowing.setSelectedDate(selectedDateBorrowing);
+
+                SelectedDate selectedDateReturn= new SelectedDate();
+                selectedDateReturn.setDay(borrowingsListModel.get(index).returnedDate.getDayOfMonth());
+                selectedDateReturn.setMonth(borrowingsListModel.get(index).returnedDate.getMonthValue());
+                selectedDateReturn.setYear(borrowingsListModel.get(index).returnedDate.getYear());
+
+                caledarReturn.setSelectedDate(selectedDateReturn);
+
+
+
+
             }
 
             @Override
@@ -408,40 +488,87 @@ public class LibraryUI extends JFrame {
         removeBorrowing.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dlmBorrowing.remove(list1Borrowing.getSelectedIndex());
-
-                borrowingDate.setText("");
-                returnDate.setText("");
-
-                saveArrayInTheFileBorrowing(dlmBorrowing);
+                borrowingsListModel.remove(borrowingsJList.getSelectedIndex());
+                saveArrayInTheFileBorrowing(borrowingsListModel);
             }
         });
+
 
         //verify what the error is, "missing" fields appear when the fields are filled debug
         AddBorrowing.addActionListener(e -> {
             Book selectedBook = (Book) bookComboBox.getSelectedItem();
             User selectedUsers = (User) userComboBox.getSelectedItem();
 
-            if (((Book) bookComboBox.getSelectedItem()).toString2().isEmpty() || ((User) userComboBox.getSelectedItem()).toString2().isEmpty() ||
-                    borrowingDate.getText().isEmpty() || returnDate.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Missing fields to fill");
-            } else {
-                if (!update3) {
-                    String idText = String.valueOf(((Book) bookComboBox.getSelectedItem()).getId());
-                    String dniText = ((User) userComboBox.getSelectedItem()).DNI;
-                    String borrowingDateText = borrowingDate.getText();
-                    String returnDateText = returnDate.getText();
+            if (!update3) {
+                String idText = String.valueOf(((Book) bookComboBox.getSelectedItem()).getId());
+                String dniText = ((User) userComboBox.getSelectedItem()).DNI;
+                String borrowingDateText = caledarBorrowing.getSelectedDate().getYear() + "-" + caledarBorrowing.getSelectedDate().getMonth() + "-" + caledarBorrowing.getSelectedDate().getDay();
+                ;
+                String returnDate1 = caledarReturn.getSelectedDate().getYear() + "-" + caledarReturn.getSelectedDate().getMonth() + "-" + caledarReturn.getSelectedDate().getDay();
+                ;
 
-                    Borrowing borrowing = new Borrowing(Utils.getBookById(idText, dlmBook), Utils.getUserByDni(dniText, myUsers), Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDateText));
-
-                    borrowingDate.setText("");
-                    returnDate.setText("");
-
-                    myBorrowings.add(borrowing);
-                    dlmBorrowing.addElement(borrowing);
-                    saveArrayInTheFileBorrowing(dlmBorrowing);
+                String[] parties = borrowingDateText.split("-");
+                String month = parties[1];
+                String day = parties[2];
+                if (Integer.parseInt(month) < 10) {
+                    month = "0" + month;
+                } else {
+                    month = month;
                 }
+                if (Integer.parseInt(day) < 10) {
+                    day = "0" + day;
+                } else {
+                    day = day;
+                }
+                borrowingDateText = caledarBorrowing.getSelectedDate().getYear() + "-" + month + "-" + day;
+
+                String[] parties1 = returnDate1.split("-");
+                String monthR = parties1[1];
+                String dayR = parties1[2];
+                if (Integer.parseInt(monthR) < 10) {
+                    monthR = "0" + monthR;
+                } else {
+                    monthR = monthR;
+                }
+                if (Integer.parseInt(dayR) < 10) {
+                    dayR = "0" + dayR;
+                } else {
+                    dayR = dayR;
+                }
+                returnDate1 = caledarReturn.getSelectedDate().getYear() + "-" + monthR + "-" + dayR;
+
+                Borrowing borrowing = new Borrowing(Utils.getBookById(idText, booksListModel), Utils.getUserByDni(dniText, myUsers), Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDate1));
+
+                myBorrowings.add(borrowing);
+                borrowingsListModel.addElement(borrowing);
+                saveArrayInTheFileBorrowing(borrowingsListModel);
             }
         });
     };
+
+    int findComboBoxIndexById(Borrowing borrowingsListSelected) {
+        long bookId = borrowingsListSelected.book.getId();
+
+        for (int i = 0; i < booksListModel.getSize(); i++) {
+            Book book = (Book) booksComboBoxModel.getElementAt(i);
+
+            if (bookId == book.getId()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    int findComboBoxIndexByDni(Borrowing borrowingsListSelected) {
+
+        String dni = borrowingsListSelected.user.DNI;
+        for (int i = 0; i < usersComboBoxModel.getSize(); i++) {
+            User user = (User) usersComboBoxModel.getElementAt(i);
+
+            if (dni.equals(user.DNI)) {
+                return i;
+            }
+        }
+        return 0;
+    }
 }

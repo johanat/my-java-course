@@ -39,6 +39,7 @@ public class Utils {
         int counter = books.size() - 1;
 
         for (int i = 0; i < books.size(); i++) {
+            int TotalBook=books.get(i).getTotalBook();
             long id = books.get(i).getId();
             String title = books.get(i).getTitle();
             String author = String.valueOf(books.get(i).getAuthor());
@@ -46,7 +47,7 @@ public class Utils {
             int numPag = books.get(i).getNumberOfPag();
 
             //noinspection StringConcatenationInLoop
-            general += (id + "&" + title + "&" + author + "&" + yearOfPublic + "&" + numPag + "&");
+            general += (TotalBook + "&"+id + "&" + title + "&" + author + "&" + yearOfPublic + "&" + numPag + "&");
             if (i < counter) {
                 general += "##";
             }
@@ -70,7 +71,7 @@ public class Utils {
         for (String parte : parts) {
             finals = parte.split("&");
             Book book;
-            book = new Book(parseLong(finals[0]), finals[1], finals[2], Integer.parseInt(finals[3]), Integer.parseInt(finals[4]));
+            book = new Book(Integer.parseInt(finals[0]),parseLong(finals[1]), finals[2], finals[3], Integer.parseInt(finals[4]), Integer.parseInt(finals[5]));
             nameBook.add(book);
         }
         return nameBook;

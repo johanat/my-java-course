@@ -38,7 +38,7 @@ public class Borrowing {
 
 
     public String toString() {
-        return "<html> Id: "+book.getId() +"<br/>" +"Name: "+user.name+"<br/>" +" DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
+        return "<html>  Book Id : "+book.getId() +"<br/>" +"Name: "+user.name+"<br/>" +" DNI: " + getUser().DNI + "<br/>" + " Borrowing: " + getBorrowingDate() + "<br/>" + "ReturnedDate: " + getReturned() + "<br/>" + "____________________" + "<br/>";
     }
 
 }
