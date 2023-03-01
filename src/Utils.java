@@ -20,13 +20,13 @@ public class Utils {
         printBorrowing = print_Borrowing;
     }
 
-    static long getId(ArrayList<Book> books) {
+    static long getId(DefaultListModel<Book> books) {
 
         long idMax = 0;
 
-        for (Book book : books) {
-            if (book.getId() > idMax) {
-                idMax = book.getId();
+        for (int i = 0; i <books.size() ; i++) {
+            if (books.get(i).getId() > idMax) {
+                idMax = books.get(i).getId();
             }
         }
         return idMax + 1;
@@ -178,7 +178,7 @@ public class Utils {
 
     public static Book getBookById(String idText, DefaultListModel<Book> listBooks) {
         //String.valueOf ---- used to convert number to string
-        Book myBook = null;
+        Book myBook =null;
 
         for (int i = 0; i < listBooks.size(); i++) {
             Book book = listBooks.get(i);

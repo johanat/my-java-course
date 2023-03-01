@@ -1,7 +1,7 @@
 public class Book {
 
     private  int TotalBook;
-    private final long id;
+    private  long id;
     private final String title;
     private final String author;
     private final int yearsOfPublic;
@@ -17,6 +17,9 @@ public class Book {
         this.author = author;
         this.yearsOfPublic = yearsOfPublic;
         this.numberOfPag = numberOfPag;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
     public int getTotalBook() {
         return TotalBook;
@@ -38,6 +41,10 @@ public class Book {
 
     public int getNumberOfPag() {
         return numberOfPag;
+    }
+
+    public void setTotalBook(int totalBook) {
+        TotalBook = totalBook;
     }
 
     @Override
