@@ -77,10 +77,18 @@ public class LibraryUI extends JFrame {
     boolean update2;
     boolean update3;
 
+    DbManager dbManager;
+
     DefaultComboBoxModel booksComboBoxModel = new DefaultComboBoxModel<Book>();
 
 
     LibraryUI() {
+
+        //Initialize database
+        dbManager = new DbManager();
+
+        dbManager.init();
+        dbManager.executeQuery();
 
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
