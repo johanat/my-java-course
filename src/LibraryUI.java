@@ -88,7 +88,7 @@ public class LibraryUI extends JFrame {
         dbManager = new DbManager();
 
         dbManager.init();
-        dbManager.executeQuery();
+        dbManager.getUsers();
 
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -120,7 +120,8 @@ public class LibraryUI extends JFrame {
 
                 data.append(myReader.nextLine());
             }
-            myBooks = Utils.fromStringToArrayOfBook(data.toString());
+            //myBooks = Utils.fromStringToArrayOfBook(data.toString());
+            myBooks = dbManager.getBooks();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -244,7 +245,8 @@ public class LibraryUI extends JFrame {
 
         addBook.addActionListener(e -> {
 
-            if (myTitle.getText().isEmpty() || myAuthor.getText().isEmpty() || myYearOfPublish.getText().isEmpty() || numPage.getText().isEmpty()) {
+            if (myTitle.getText().isEmpty() || myAuthor.getText().isEmpty() ||
+                    myYearOfPublish.getText().isEmpty() || numPage.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Missing fields to fill ");
             } else {
                 if (!update1) {
@@ -254,8 +256,14 @@ public class LibraryUI extends JFrame {
                     String authorText = myAuthor.getText();
                     String yearsPublicText = myYearOfPublish.getText();
                     String numPag = numPages.getText();
+                    String sqlQuery = "INSERT INTO book (title, author, year_of_publish, " +
+                            "num_pages, num_copies)"+" VALUES ('"+titleText+"','"+authorText+
+                            "',"+yearsPublicText+","+numPag+","+totalBooks+")";
 
-                    Book book = new Book(totalBooks, millis, titleText, authorText, Integer.parseInt(yearsPublicText), Integer.parseInt(numPag));
+                    dbManager.insertData(sqlQuery);
+
+                    Book book = new Book(totalBooks, millis, titleText, authorText,
+                            Integer.parseInt(yearsPublicText), Integer.parseInt(numPag));
 
                     myTitle.setText("");
                     myAuthor.setText("");
@@ -444,7 +452,8 @@ public class LibraryUI extends JFrame {
         addUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (name.getText().isEmpty() || surname.getText().isEmpty() || dni.getText().isEmpty() || direction.getText().isEmpty()) {
+                if (name.getText().isEmpty() || surname.getText().isEmpty() ||
+                        dni.getText().isEmpty() || direction.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Missing fields to fill");
                 } else {
                     if (!update2) {
@@ -452,6 +461,13 @@ public class LibraryUI extends JFrame {
                         String surnameText = surname.getText();
                         String dniText = dni.getText();
                         String directionText = direction.getText();
+                        String sqlQuery = "INSERT INTO user (name, surname, dni, " +
+                                "direction)"+" VALUES ('"+titleText+"','"+surnameText+
+                                "','"+dniText+"','"+directionText+"')";
+
+                        System.out.println("query= "+sqlQuery );
+                        dbManager.insertData(sqlQuery);
+
 
                         User user = new User(titleText, surnameText, dniText, directionText);
 
@@ -566,12 +582,21 @@ public class LibraryUI extends JFrame {
             User selectedUsers = (User) userComboBox.getSelectedItem();
 
             if (!update3) {
-                String idText = String.valueOf(((Book) bookComboBox.getSelectedItem()).getId());
-                String dniText = ((User) userComboBox.getSelectedItem()).DNI;
-                String borrowingDateText = calendarBorrowing.getSelectedDate().getYear() + "-" + calendarBorrowing.getSelectedDate().getMonth() + "-" + calendarBorrowing.getSelectedDate().getDay();
-                ;
-                String returnDate1 = calendarReturn.getSelectedDate().getYear() + "-" + calendarReturn.getSelectedDate().getMonth() + "-" + calendarReturn.getSelectedDate().getDay();
-                ;
+                String id_book = String.valueOf(((Book) bookComboBox.getSelectedItem()).getId());
+                String dni_user = ((User) userComboBox.getSelectedItem()).DNI;
+                String borrowingDateText = calendarBorrowing.getSelectedDate().getYear() +
+                        "-" + calendarBorrowing.getSelectedDate().getMonth() +
+                        "-" + calendarBorrowing.getSelectedDate().getDay();
+                String returnDate1 = calendarReturn.getSelectedDate().getYear() +
+                        "-" + calendarReturn.getSelectedDate().getMonth() + "-" +
+                        calendarReturn.getSelectedDate().getDay();
+                String sqlQuery = "INSERT INTO borrowing ( book_id, dni, " +
+                        "borrowing_date, returned_date)"+" VALUES ("+id_book+","+dni_user+",'"+borrowingDateText+
+                        "','"+returnDate1+"')";
+
+                dbManager.insertData(sqlQuery);
+
+
 
                 String[] parties = borrowingDateText.split("-");
                 String month = parties[1];
@@ -603,7 +628,7 @@ public class LibraryUI extends JFrame {
                 }
                 returnDate1 = calendarReturn.getSelectedDate().getYear() + "-" + monthR + "-" + dayR;
 
-                boolean repeatBook = checkIfUserHasSameBook(dniText, idText);
+                boolean repeatBook = checkIfUserHasSameBook(dni_user, id_book);
 
                 if (repeatBook == false) {
                     JOptionPane.showMessageDialog(null, "Can't repeat Book");
