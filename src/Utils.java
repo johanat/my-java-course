@@ -4,27 +4,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static java.lang.Long.parseLong;
 
 public class Utils {
-    public static JList printBook;
-    public static JLabel printUser;
-    public static JLabel printBorrowing;
+   // public static JList printBook;
+    //public static JLabel printUser;
+    //public static JLabel printBorrowing;
 
     Utils() {
     }
 
-    static public void initialize(JList print_Book, JLabel print_User, JLabel print_Borrowing) {
-        printBook = print_Book;
-        printUser = print_User;
-        printBorrowing = print_Borrowing;
-    }
 
     static long getId(DefaultListModel<Book> books) {
 
         long idMax = 0;
 
-        for (int i = 0; i <books.size() ; i++) {
+        for (int i = 0; i < books.size(); i++) {
             if (books.get(i).getId() > idMax) {
                 idMax = books.get(i).getId();
             }
@@ -32,96 +26,6 @@ public class Utils {
         return idMax + 1;
     }
 
-
-    public static String fromArrayToStringOfBook(DefaultListModel<Book> books) {
-        String general = "";
-
-        int counter = books.size() - 1;
-
-        for (int i = 0; i < books.size(); i++) {
-            int TotalBook=books.get(i).getTotalBook();
-            long id = books.get(i).getId();
-            String title = books.get(i).getTitle();
-            String author = String.valueOf(books.get(i).getAuthor());
-            int yearOfPublic = books.get(i).getYearsOfPublic();
-            int numPag = books.get(i).getNumberOfPag();
-
-            //noinspection StringConcatenationInLoop
-            general += (TotalBook + "&"+id + "&" + title + "&" + author + "&" + yearOfPublic + "&" + numPag + "&");
-            if (i < counter) {
-                general += "##";
-            }
-        }
-        fromStringToArrayOfBook(general);
-        return general;
-    }
-
-    public static ArrayList<Book> fromStringToArrayOfBook(String general) {
-
-        ArrayList<Book> nameBook = new ArrayList<>();
-
-        if (general.isEmpty()) {
-            return nameBook;
-        }
-
-        String[] finals;
-
-        String[] parts = general.split("##");
-
-        for (String parte : parts) {
-            finals = parte.split("&");
-            Book book;
-            book = new Book(Integer.parseInt(finals[0]),parseLong(finals[1]), finals[2], finals[3], Integer.parseInt(finals[4]), Integer.parseInt(finals[5]));
-            nameBook.add(book);
-        }
-        return nameBook;
-    }
-
-    //functions of User
-    public static ArrayList<User> fromStringToArrayOfUser(String date1) {
-
-
-        ArrayList<User> nameUser = new ArrayList<>();
-
-        if(date1.isEmpty()){
-            return nameUser;
-        }
-        String[] finals;
-
-        String[] parts = date1.split("##");
-
-        for (String parte : parts) {
-            finals = parte.split("&");
-            User user;
-            user = new User(finals[0], finals[1], finals[2], finals[3]);
-            nameUser.add(user);
-        }
-        return nameUser;
-    }
-
-
-
-    public static String fromArrayToStringOfUser(DefaultListModel<User> myUsers) {
-        String general = "";
-
-        int counter = myUsers.size() - 1;
-
-        for (int i = 0; i < myUsers.size(); i++) {
-
-            String name = myUsers.get(i).getName();
-            String surname = myUsers.get(i).getSurname();
-            String dni = myUsers.get(i).getDNI();
-            String direction = myUsers.get(i).direction;
-
-            //noinspection StringConcatenationInLoop
-            general += (name + "&" + surname + "&" + dni + "&" + direction + "&");
-            if (i < counter) {
-                general += "##";
-            }
-        }
-        fromStringToArrayOfUser(general);
-        return general;
-    }
 
     // functions of Borrowing
 
@@ -137,7 +41,7 @@ public class Utils {
 
         ArrayList<Borrowing> nameBorrowing = new ArrayList<>();
 
-        if(date1.isEmpty()){
+        if (date1.isEmpty()) {
             return nameBorrowing;
         }
         String[] finals;
@@ -147,43 +51,20 @@ public class Utils {
         for (String parte : parts) {
             finals = parte.split("&");
             Borrowing borrowing;
-            borrowing = new Borrowing(getBookById(finals[0], books), getUserByDni(finals[1], myUser), fromStringToLocalDate(finals[2]), fromStringToLocalDate(finals[3]));
+            borrowing = new Borrowing(0, getBookById(finals[0], books), getUserByDni(finals[1], myUser), fromStringToLocalDate(finals[2]), fromStringToLocalDate(finals[3]));
             nameBorrowing.add(borrowing);
         }
         return nameBorrowing;
     }
 
-    public static String fromArrayToStringOfBorrowing(DefaultListModel<Borrowing> borrowings) {
-        String general = "";
-
-        int counter = borrowings.size() - 1;
-
-        for (int i = 0; i < borrowings.size(); i++) {
-
-            Long id = borrowings.get(i).book.getId();
-            String dni = borrowings.get(i).user.getDNI();
-            LocalDate borrowingDate = borrowings.get(i).borrowingDate;
-            LocalDate returnDate = borrowings.get(i).returnedDate;
-
-            //noinspection StringConcatenationInLoop
-            general += (id + "&" + dni + "&" + borrowingDate + "&" + returnDate + "&");
-            if (i < counter) {
-                general += "##";
-            }
-        }
-
-        return general;
-    }
-
-
     public static Book getBookById(String idText, DefaultListModel<Book> listBooks) {
         //String.valueOf ---- used to convert number to string
-        Book myBook =null;
+        Book myBook = null;
 
         for (int i = 0; i < listBooks.size(); i++) {
             Book book = listBooks.get(i);
-            if(idText.equals(String.valueOf(listBooks.get(i).getId())) ){
-                myBook= book;
+            if (idText.equals(String.valueOf(listBooks.get(i).getId()))) {
+                myBook = book;
             }
         }
         return myBook;
@@ -199,4 +80,45 @@ public class Utils {
         return myUser;
     }
 
+    static public String fixDateBorrowing(String borrowingDate) {
+        String[] parties = borrowingDate.split("-");
+        String year = parties[0];
+        String month = parties[1];
+        String day = parties[2];
+        if (Integer.parseInt(month) < 10) {
+            month = "0" + month;
+        } else {
+            month = month;
+        }
+        if (Integer.parseInt(day) < 10) {
+            day = "0" + day;
+        } else {
+            day = day;
+        }
+        String fixedDate = year + "-" + month + "-" + day;
+
+        return fixedDate;
+    }
+
+    static public String fixReturnDate(String returnDate) {
+        String[] parties1 = returnDate.split("-");
+        String year = parties1[0];
+        String monthR = parties1[1];
+        String dayR = parties1[2];
+        if (Integer.parseInt(monthR) < 10) {
+            monthR = "0" + monthR;
+        } else {
+            monthR = monthR;
+        }
+        if (Integer.parseInt(dayR) < 10) {
+            dayR = "0" + dayR;
+        } else {
+            dayR = dayR;
+        }
+        String fixReturnDate;
+        fixReturnDate = year + "-" + monthR + "-" + dayR;
+
+        return fixReturnDate;
+
+    }
 }

@@ -5,6 +5,8 @@ import java.time.LocalDate;
 public class Borrowing {
 
 
+
+
     private  long id;
     private int totalBook;
     private  String title;
@@ -18,8 +20,8 @@ public class Borrowing {
     LocalDate borrowingDate;
     LocalDate returnedDate;
 
-    Borrowing( Book book, User user, LocalDate borrowingDate, LocalDate returnedDate) {
-        this. book = new Book(totalBook,id,title,author, yearsOfPublic,numberOfPag);
+    Borrowing(int id, Book book, User user, LocalDate borrowingDate, LocalDate returnedDate) {
+        this. book = new Book(totalBook, this.id,title,author, yearsOfPublic,numberOfPag);
         this.id = id;
         this.book = book;
         this.user = user;
@@ -27,6 +29,10 @@ public class Borrowing {
         this.returnedDate = returnedDate;
     }
 
+
+    public long getId() {
+        return id;
+    }
     Book getBook() {
         return book;
     }

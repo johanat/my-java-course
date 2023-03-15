@@ -7,8 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,8 +44,6 @@ public class LibraryUI extends JFrame {
     private JTextField surname;
     private JTextField dni_User;
     private JTextField direction;
-    // private JTextField borrowingDate;
-    // private JTextField returnDate;
     private JButton AddBorrowing;
     private JPanel mainPanel;
     public JComboBox bookComboBox;
@@ -64,8 +61,6 @@ public class LibraryUI extends JFrame {
     private JButton buttonReturnBook;
     private JButton displayBorrowings;
     private JButton displayTheUsersOfTheBooksBorrowing;
-    private DateChooser myCalendar;
-    private JFrame frame;
     static ArrayList<Book> myBooks = new ArrayList<>();
     static ArrayList<User> myUsers = new ArrayList<>();
     DefaultListModel<Book> booksListModel = new DefaultListModel<>();
@@ -98,8 +93,27 @@ public class LibraryUI extends JFrame {
         doMainJobForBook(myTitle, myAuthor, myYearOfPublish, numPages);
         doMainJobForUser(name, surname, dni_User, direction);
         doMainJobForBorrowing(bookComboBox);
+        initData();
+
     }
 
+    void initData() {
+        ArrayList<Book> books = dbManager.getBooks();
+        updateUIBooksComboBoxModel(books);
+        updateUIBooksListModel(books);
+
+        ArrayList<User> users = dbManager.getUsers();
+        updateUIUsersComboBoxModel(users);
+        updateUIUsersListModel(users);
+
+        ArrayList<Borrowing> borrowings = dbManager.getBorrowings();
+        updateUIBorrowingsListModel(borrowings);
+
+
+        ArrayList<Borrowing> returnBorrowing = dbManager.getBorrowings();
+        updateUIBorrowingsListModel(returnBorrowing);
+
+    }
 
     public static void main(String[] args) {
 
@@ -120,7 +134,6 @@ public class LibraryUI extends JFrame {
 
                 data.append(myReader.nextLine());
             }
-            //myBooks = Utils.fromStringToArrayOfBook(data.toString());
             myBooks = dbManager.getBooks();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -135,7 +148,7 @@ public class LibraryUI extends JFrame {
             while (myReader.hasNextLine()) {
                 data1.append(myReader.nextLine());
             }
-            myUsers = Utils.fromStringToArrayOfUser(data1.toString());
+            myUsers = dbManager.getUsers();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -156,9 +169,9 @@ public class LibraryUI extends JFrame {
         }
     }
 
-    private void doMainJobForBook(JTextField myTitle, JTextField myAuthor, JTextField myYearOfPublish, JTextField numPage) {
+    private void doMainJobForBook(JTextField myTitle, JTextField myAuthor,
+                                  JTextField myYearOfPublish, JTextField numPage) {
 
-        loadBooksFromFileToArray();
 
         for (int i = 0; i < myBooks.size(); i++) {
             booksComboBoxModel.addElement(myBooks.get(i));
@@ -209,16 +222,23 @@ public class LibraryUI extends JFrame {
         removeBook.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                booksListModel.remove(booksJList.getSelectedIndex());
-
                 myTitle.setText("");
                 myAuthor.setText("");
                 myYearOfPublish.setText("");
                 numPages.setText("");
-                saveArrayInTheFileBook(booksListModel);
+
+                Book book = (Book) booksListModel.get(booksJList.getSelectedIndex());
+                dbManager.deleteBook(book);
+
+                ArrayList<Book> booksFromDb = dbManager.getBooks();
+
+                updateUIBooksListModel(booksFromDb);
+                updateUIBooksComboBoxModel(booksFromDb);
+
             }
         });
+
+
         bookSearcher.addKeyListener(new KeyListener() {
 
             @Override
@@ -252,29 +272,37 @@ public class LibraryUI extends JFrame {
                 if (!update1) {
                     int totalBooks = 2;
                     long millis = Utils.getId(booksListModel);
+                    int id_book = (int) millis;
                     String titleText = myTitle.getText();
                     String authorText = myAuthor.getText();
                     String yearsPublicText = myYearOfPublish.getText();
                     String numPag = numPages.getText();
-                    String sqlQuery = "INSERT INTO book (title, author, year_of_publish, " +
-                            "num_pages, num_copies)"+" VALUES ('"+titleText+"','"+authorText+
-                            "',"+yearsPublicText+","+numPag+","+totalBooks+")";
 
+                    // coger de la interfaz los datos concatenardolos y hacer la cosulta
+                    // al sql para enviarselos
+                    String sqlQuery = "INSERT INTO book (title, author, year_of_publish, " +
+                            "num_pages, num_copies)" + " VALUES ('" + titleText + "','" + authorText +
+                            "'," + yearsPublicText + "," + numPag + "," + totalBooks + ")";
+
+                    //enviar los datos a la base de datos, llamando a un metodo
                     dbManager.insertData(sqlQuery);
 
-                    Book book = new Book(totalBooks, millis, titleText, authorText,
-                            Integer.parseInt(yearsPublicText), Integer.parseInt(numPag));
+                    // llamar a la funcion para leer los datos y me devuelve la lista de datos
+                    ArrayList<Book> booksFromDb = dbManager.getBooks();
 
                     myTitle.setText("");
                     myAuthor.setText("");
                     myYearOfPublish.setText("");
                     numPages.setText("");
 
-                    booksComboBoxModel.addElement(book);
-                    booksListModel.addElement(book);
+                    //estas funciones actualizan la lista tanto como comboBox y ListModel
+                    // con los datos de la base de datos
+
+                    updateUIBooksComboBoxModel(booksFromDb);
+                    updateUIBooksListModel(booksFromDb);
+
                     bookComboBox.setModel(booksComboBoxModel);
 
-                    saveArrayInTheFileBook(booksListModel);
                 }
             }
         });
@@ -287,64 +315,19 @@ public class LibraryUI extends JFrame {
                 frame.setSize(500, 400);
                 frame.setLayout(new BorderLayout());
 
-                DefaultListModel<Borrowing> listUserWithTheBookCorrespondent = new DefaultListModel<>();
-                int indexBook = booksJList.getSelectedIndex();
+                DefaultListModel<User> listUserWithTheBookCorrespondent = new DefaultListModel<>();
+                Book book = booksListModel.get(booksJList.getSelectedIndex());
+                ArrayList<User> usersBook = dbManager.getBookUsers((int) book.getId());
 
-
-                for (int i = 0; i < borrowingsListModel.size(); i++) {
-                    String titleBookSelected = booksListModel.get(indexBook).getTitle();
-                    String titleListBorrowingSelected = borrowingsListModel.get(i).book.getTitle();
-
-                    if (titleBookSelected.equals(titleListBorrowingSelected)) {
-                        listUserWithTheBookCorrespondent.addElement(borrowingsListModel.get(i));
-                    }
+                for (int i = 0; i < usersBook.size(); i++) {
+                    listUserWithTheBookCorrespondent.addElement(usersBook.get(i));
                 }
-                JList<Borrowing> displayTheListUser = new JList<>(listUserWithTheBookCorrespondent);
+                JList<User> displayTheListUser = new JList<>(listUserWithTheBookCorrespondent);
                 JScrollPane scrollPane = new JScrollPane(displayTheListUser);
                 frame.add(scrollPane, BorderLayout.CENTER);
                 frame.setVisible(true);
             }
         });
-    }
-
-
-    void saveArrayInTheFileBook(DefaultListModel<Book> dlmBook) {
-        try {
-            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveLibrary");
-            //  String dataBook = Utils.fromArrayToStringOfBook(books);
-            String dataBook = Utils.fromArrayToStringOfBook(dlmBook);
-
-            fw.write(dataBook);
-            fw.close();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    void saveArrayInTheFileUser(DefaultListModel<User> dlmUser) {
-        try {
-            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveUser");
-
-            String dataUser = Utils.fromArrayToStringOfUser(dlmUser);
-
-            fw.write(dataUser);
-            fw.close();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    void saveArrayInTheFileBorrowing(DefaultListModel<Borrowing> dlmBorrowing) {
-        try {
-            FileWriter fw = new FileWriter("C:\\Users\\Darwin\\IdeaProjects\\my-java-course\\saveBorrowing");
-
-            String dataBorrowing = Utils.fromArrayToStringOfBorrowing(dlmBorrowing);
-
-            fw.write(dataBorrowing);
-            fw.close();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     private void doMainJobForUser(JTextField name, JTextField surname, JTextField dni, JTextField direction) {
@@ -396,13 +379,20 @@ public class LibraryUI extends JFrame {
         removeUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                usersListModel.remove(usersJList.getSelectedIndex());
 
                 name.setText("");
                 surname.setText("");
                 dni.setText("");
                 direction.setText("");
-                saveArrayInTheFileUser(usersListModel);
+
+                User user = (User) usersListModel.get(usersJList.getSelectedIndex());
+                dbManager.deleteUser(user);
+
+                ArrayList<User> usersFromDb = dbManager.getUsers();
+
+
+                updateUIUsersListModel(usersFromDb);
+                updateUIUsersComboBoxModel(usersFromDb);
             }
         });
         userSearcher.addKeyListener(new KeyListener() {
@@ -438,17 +428,22 @@ public class LibraryUI extends JFrame {
                 frame1.setSize(400, 300);
                 frame1.setLayout(new BorderLayout());
 
-                JList<Borrowing> displayTheListBorrowing = new JList<>(borrowingsListModel);
 
+                DefaultListModel<Book> listBookWithTheBookCorrespondent = new DefaultListModel<>();
+                User user = usersListModel.get(usersJList.getSelectedIndex());
+                ArrayList<Book> booksUser = dbManager.getUserBook(user.getDNI());
 
-                JScrollPane scrollPane = new JScrollPane(displayTheListBorrowing);
+                for (int i = 0; i < booksUser.size(); i++) {
+                    listBookWithTheBookCorrespondent.addElement(booksUser.get(i));
+                }
+                JList<Book> displayTheListBook = new JList<>(listBookWithTheBookCorrespondent);
+                JScrollPane scrollPane = new JScrollPane(displayTheListBook);
                 frame1.add(scrollPane, BorderLayout.CENTER);
-
                 frame1.setVisible(true);
+
 
             }
         });
-
         addUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -462,34 +457,28 @@ public class LibraryUI extends JFrame {
                         String dniText = dni.getText();
                         String directionText = direction.getText();
                         String sqlQuery = "INSERT INTO user (name, surname, dni, " +
-                                "direction)"+" VALUES ('"+titleText+"','"+surnameText+
-                                "','"+dniText+"','"+directionText+"')";
+                                "direction)" + " VALUES ('" + titleText + "','" + surnameText +
+                                "','" + dniText + "','" + directionText + "')";
 
-                        System.out.println("query= "+sqlQuery );
                         dbManager.insertData(sqlQuery);
 
-
-                        User user = new User(titleText, surnameText, dniText, directionText);
+                        ArrayList<User> usersFromDb = dbManager.getUsers();
 
                         name.setText("");
                         surname.setText("");
                         dni.setText("");
                         direction.setText("");
 
-                        myUsers.add(user);
+                        updateUIUsersComboBoxModel(usersFromDb);
+                        updateUIUsersListModel(usersFromDb);
 
-                        usersComboBoxModel.addElement(user);
-                        usersListModel.addElement(user);
                         userComboBox.setModel(usersComboBoxModel);
 
-                        saveArrayInTheFileUser(usersListModel);
                     }
                 }
             }
         });
-    }
-
-    ;
+    };
 
     private void doMainJobForBorrowing(JComboBox bookComboBox) {
 
@@ -508,7 +497,6 @@ public class LibraryUI extends JFrame {
                 borrowingsJList = (JList) e.getSource();
 
                 int index = borrowingsJList.locationToIndex(e.getPoint());
-
 
                 int selectedIndexBook = findComboBoxIndexById(borrowingsListModel.get(index));
                 bookComboBox.setSelectedIndex(selectedIndexBook);
@@ -554,21 +542,37 @@ public class LibraryUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Book selectedBook = (Book) bookComboBox.getSelectedItem();
-                borrowingsListModel.remove(borrowingsJList.getSelectedIndex());
-                saveArrayInTheFileBorrowing(borrowingsListModel);
-                selectedBook.setTotalBook(selectedBook.getTotalBook() + 1);
-                saveArrayInTheFileBook(booksListModel);
+                Borrowing borrowing = borrowingsListModel.get(borrowingsJList.getSelectedIndex());
+                dbManager.deleteBorrowing(borrowing);
+                ArrayList<Borrowing> borrowingsDb = dbManager.getBorrowings();
+                updateUIBorrowingsListModel(borrowingsDb);
+
+                int newTotalBook = selectedBook.getTotalBook()+1;
+                int newIdBook = (int) selectedBook.getId();
+
+                dbManager.updateBooksTotal(newTotalBook,newIdBook);
+
+                ArrayList<Book> books = dbManager.getBooks();
+                updateUIBooksComboBoxModel(books);
+                updateUIBooksListModel(books);
             }
         });
-        buttonReturnBook.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Book selectedBook = (Book) bookComboBox.getSelectedItem();
-                borrowingsListModel.remove(borrowingsJList.getSelectedIndex());
-                saveArrayInTheFileBorrowing(borrowingsListModel);
-                selectedBook.setTotalBook(selectedBook.getTotalBook() + 1);
-                saveArrayInTheFileBook(booksListModel);
-            }
+        buttonReturnBook.addActionListener(e -> {
+            Book selectedBook = (Book) bookComboBox.getSelectedItem();
+            Borrowing borrowing = borrowingsListModel.get(borrowingsJList.getSelectedIndex());
+            dbManager.deleteBorrowing(borrowing);
+            ArrayList<Borrowing> borrowingsDb = dbManager.getBorrowings();
+            updateUIBorrowingsListModel(borrowingsDb);
+
+            int newTotalBook = selectedBook.getTotalBook()+1;
+            int newIdBook = (int) selectedBook.getId();
+
+            dbManager.updateBooksTotal(newTotalBook,newIdBook);
+
+            ArrayList<Book> books = dbManager.getBooks();
+            updateUIBooksComboBoxModel(books);
+            updateUIBooksListModel(books);
+
         });
 
         //verify what the error is, "missing" fields appear when the fields are filled debug
@@ -590,43 +594,17 @@ public class LibraryUI extends JFrame {
                 String returnDate1 = calendarReturn.getSelectedDate().getYear() +
                         "-" + calendarReturn.getSelectedDate().getMonth() + "-" +
                         calendarReturn.getSelectedDate().getDay();
+
+
+                String dateBorrowing;
+                dateBorrowing = Utils.fixDateBorrowing(borrowingDateText);
+
+                String dateReturn;
+                dateReturn = Utils.fixReturnDate(returnDate1);
+
                 String sqlQuery = "INSERT INTO borrowing ( book_id, dni, " +
-                        "borrowing_date, returned_date)"+" VALUES ("+id_book+","+dni_user+",'"+borrowingDateText+
-                        "','"+returnDate1+"')";
-
-                dbManager.insertData(sqlQuery);
-
-
-
-                String[] parties = borrowingDateText.split("-");
-                String month = parties[1];
-                String day = parties[2];
-                if (Integer.parseInt(month) < 10) {
-                    month = "0" + month;
-                } else {
-                    month = month;
-                }
-                if (Integer.parseInt(day) < 10) {
-                    day = "0" + day;
-                } else {
-                    day = day;
-                }
-                borrowingDateText = calendarBorrowing.getSelectedDate().getYear() + "-" + month + "-" + day;
-
-                String[] parties1 = returnDate1.split("-");
-                String monthR = parties1[1];
-                String dayR = parties1[2];
-                if (Integer.parseInt(monthR) < 10) {
-                    monthR = "0" + monthR;
-                } else {
-                    monthR = monthR;
-                }
-                if (Integer.parseInt(dayR) < 10) {
-                    dayR = "0" + dayR;
-                } else {
-                    dayR = dayR;
-                }
-                returnDate1 = calendarReturn.getSelectedDate().getYear() + "-" + monthR + "-" + dayR;
+                        "borrowing_date, returned_date)" + " VALUES (" + id_book + "," + "'"+dni_user+"'" + "," +
+                        "'" + dateBorrowing + "','" + dateReturn + "')";
 
                 boolean repeatBook = checkIfUserHasSameBook(dni_user, id_book);
 
@@ -634,21 +612,26 @@ public class LibraryUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Can't repeat Book");
                     return;
                 }
+                LocalDate dateBorrowingLocalDate = Utils.fromStringToLocalDate(dateBorrowing);
+                LocalDate dateReturnLocalDate = Utils.fromStringToLocalDate(dateReturn);
+                dbManager.insertData(sqlQuery);
 
+                ArrayList<Borrowing> borrowingsFromDb = dbManager.getBorrowings();
 
-                Borrowing borrowing = new Borrowing(selectedBook, selectedUsers, Utils.fromStringToLocalDate(borrowingDateText), Utils.fromStringToLocalDate(returnDate1));
+                updateUIBorrowingsListModel(borrowingsFromDb);
 
-                myBorrowings.add(borrowing);
-                borrowingsListModel.addElement(borrowing);
-                saveArrayInTheFileBorrowing(borrowingsListModel);
-                selectedBook.setTotalBook(selectedBook.getTotalBook() - 1);
-                saveArrayInTheFileBook(booksListModel);
+                int newTotalBook = selectedBook.getTotalBook()-1;
+                int newIdBook = (int) selectedBook.getId();
+
+                dbManager.updateBooksTotal(newTotalBook,newIdBook);
+
+                ArrayList<Book> books = dbManager.getBooks();
+                updateUIBooksComboBoxModel(books);
+                updateUIBooksListModel(books);
             }
             ;
         });
-    }
-
-    ;
+    };
 
     int findComboBoxIndexById(Borrowing borrowingsListSelected) {
         long bookId = borrowingsListSelected.book.getId();
@@ -687,6 +670,31 @@ public class LibraryUI extends JFrame {
             }
         }
         return true;
+    }
+
+    void updateUIBooksComboBoxModel(ArrayList<Book> booksFromDb) {
+        booksComboBoxModel.removeAllElements();
+        booksComboBoxModel.addAll(booksFromDb);
+    }
+
+    public void updateUIBooksListModel(ArrayList<Book> booksFromDb) {
+        booksListModel.removeAllElements();
+        booksListModel.addAll(booksFromDb);
+    }
+
+    void updateUIUsersComboBoxModel(ArrayList<User> usersFromDb) {
+        usersComboBoxModel.removeAllElements();
+        usersComboBoxModel.addAll(usersFromDb);
+    }
+
+    public void updateUIUsersListModel(ArrayList<User> usersFromDb) {
+        usersListModel.removeAllElements();
+        usersListModel.addAll(usersFromDb);
+    }
+
+    public void updateUIBorrowingsListModel(ArrayList<Borrowing> borrowingsFromDb) {
+        borrowingsListModel.removeAllElements();
+        borrowingsListModel.addAll(borrowingsFromDb);
     }
 }
 
